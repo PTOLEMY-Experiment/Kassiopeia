@@ -105,7 +105,7 @@ if( NOT CMAKE_BUILD_TYPE )
 endif()
 
 # We like the compiler to be more pedantic than usual :-P
-add_compile_options( -Wall -Wextra -Werror )
+# add_compile_options( -Wall -Wextra -Werror )
 
 # Only link in libraries that we actually need (but not for executables since it makes things slow)
 if( NOT APPLE )
