@@ -1,0 +1,33 @@
+<vtk_window
+        name="vtk_window"
+        enable_display="true"
+        enable_write="true"
+        frame_title="KGeoBag Visualization"
+        frame_size_x="1024"
+        frame_size_y="768"
+        frame_color_red=".2"
+        frame_color_green=".2"
+        frame_color_blue=".2"
+        view_angle="45"
+        eye_angle="0.5"
+        multi_samples="4"
+        depth_peeling="10"
+>
+
+    <vtk_geometry_painter
+            name="analytic_geometry_painter"
+            path="[output_path]"
+            surfaces="world/#"
+            file="aperture_geometry.vtp"
+    />
+
+    <vtk_track_painter
+            name="[filename]"
+            path="[output_path]"
+            file="[filename].root"
+            point_object="component_step_world"
+            point_variable="position"
+            color_object="component_step_world"
+            color_variable="kinetic_energy"
+    />
+</vtk_window>

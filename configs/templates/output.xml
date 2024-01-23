@@ -1,0 +1,64 @@
+
+<!-- output -->
+
+<ks_component_member name="component_track_initial_particle"  field="initial_particle" 	        parent="track"/>
+<ks_component_member name="component_track_final_particle" 	  field="final_particle" 		        parent="track"/>
+<ks_component_member name="component_track_position" 		      field="position"   		            parent="component_track_final_particle"/>
+<ks_component_member name="component_track_length"    		    field="length"   		    	        parent="component_track_final_particle"/>
+
+<ks_component_group name="component_track_world">
+  <component_member name="creator_name" 	            		  field="creator_name" 		          parent="track"/>
+  <component_member name="terminator_name" 			            field="terminator_name" 	        parent="track"/>
+  <component_member name="total_steps" 			                field="total_steps" 		          parent="track"/>
+  <component_member name="initial_time" 			              field="time" 			                parent="component_track_initial_particle"/>
+  <component_member name="initial_position"        			    field="position" 		              parent="component_track_initial_particle"/>
+  <component_member name="initial_momentum" 		        	  field="momentum" 		              parent="component_track_initial_particle"/>
+  <component_member name="initial_magnetic_field" 	    	  field="magnetic_field" 		        parent="component_track_initial_particle"/>
+  <component_member name="initial_electric_field" 		      field="electric_field" 		        parent="component_track_initial_particle"/>
+  <component_member name="initial_electric_potential" 	    field="electric_potential" 	      parent="component_track_initial_particle"/>
+  <component_member name="initial_kinetic_energy" 		      field="kinetic_energy_ev" 	      parent="component_track_initial_particle"/>
+  <component_member name="initial_orbital_magnetic_moment"  field="orbital_magnetic_moment"   parent="component_track_initial_particle"/>
+  <component_member name="initial_polar_angle_to_z" 		    field="polar_angle_to_z" 	        parent="component_track_initial_particle"/>
+  <component_member name="initial_polar_angle_to_b" 		    field="polar_angle_to_b" 	        parent="component_track_initial_particle"/>
+  <component_member name="final_time" 			                field="time" 			                parent="component_track_final_particle"/>
+  <component_member name="final_position" 			            field="position"            		  parent="component_track_final_particle"/>
+  <component_member name="final_momentum" 			            field="momentum" 	            	  parent="component_track_final_particle"/>
+  <component_member name="final_magnetic_field" 		        field="magnetic_field" 		        parent="component_track_final_particle"/>
+  <component_member name="final_electric_field" 		        field="electric_field" 		        parent="component_track_final_particle"/>
+  <component_member name="final_electric_potential" 		    field="electric_potential" 	      parent="component_track_final_particle"/>
+  <component_member name="final_kinetic_energy" 		        field="kinetic_energy_ev" 	      parent="component_track_final_particle"/>
+  <component_member name="final_orbital_magnetic_moment" 	  field="orbital_magnetic_moment"   parent="component_track_final_particle"/>
+  <component_member name="final_polar_angle_to_z" 		      field="polar_angle_to_z" 	        parent="component_track_final_particle"/>
+  <component_member name="final_polar_angle_to_b" 		      field="polar_angle_to_b" 	        parent="component_track_final_particle"/>
+</ks_component_group>
+
+<ks_component_member name="component_step_final_particle"   field="final_particle" 		        parent="step"/>
+<ks_component_member name="position"                       	field="position" 			            parent="component_step_final_particle"/>
+<ks_component_member name="kinetic_energy" 	                field="kinetic_energy_ev" 			  parent="component_step_final_particle"/>
+
+<ks_component_group name="component_step_world">
+<!--  <component_member name="step_id" 			                    field="step_id" 		    	        parent="step"/>-->
+<!--  <component_member name="continuous_time" 		              field="continuous_time"   		    parent="step"/>-->
+<!--  <component_member name="continuous_length" 		            field="continuous_length" 		    parent="step"/>-->
+  <component_member name="time" 			                      field="time" 				              parent="component_step_final_particle"/>
+  <component_member name="position" 			                  field="position" 			            parent="component_step_final_particle"/>
+<!--  <component_member name="velocity" 			                  field="velocity" tt			            parent="component_step_final_particle"/>-->
+<!--  <component_member name="trans_velocity" 	            	  field="trans_velocity" 			      parent="component_step_final_particle"/>-->
+<!--  <component_member name="long_velocity"		                field="long_velocity"			        parent="component_step_final_particle"/>-->
+<!--  <component_member name="momentum" 			                  field="momentum" 			            parent="component_step_final_particle"/>-->
+<!--  <component_member name="trans_momentum"		                field="trans_momentum" 			      parent="component_step_final_particle"/>-->
+<!--  <component_member name="long_momentum"		                field="long_momentum"			        parent="component_step_final_particle"/>-->
+<!--  <component_member name="magnetic_field" 		              field="magnetic_field" 			      parent="component_step_final_particle"/>-->
+<!--  <component_member name="magnetic_gradient" 		            field="magnetic_gradient" 		    parent="component_step_final_particle"/>-->
+<!--  <component_member name="electric_field" 		              field="electric_field" 			      parent="component_step_final_particle"/>-->
+<!--  <component_member name="electric_potential"             	field="electric_potential" 		    parent="component_step_final_particle"/>-->
+  <component_member name="kinetic_energy" 		              field="kinetic_energy_ev" 		    parent="component_step_final_particle"/>
+<!--  <component_member name="orbital_magnetic_moment" 	        field="orbital_magnetic_moment" 	parent="component_step_final_particle"/>-->
+<!--  <component_member name="polar_angle_to_z" 		            field="polar_angle_to_z" 		      parent="component_step_final_particle"/>-->
+<!--  <component_member name="polar_angle_to_b" 		            field="polar_angle_to_b" 		      parent="component_step_final_particle"/>-->
+<!--  <component_member name="cyclotron_frequency" 	            field="cyclotron_frequency"	      parent="component_step_final_particle"/>-->
+<!--  <component_member name="guiding_center_position"        	field="guiding_center_position" 	parent="component_step_final_particle"/>-->
+<!--  <component_member name="azimuthal_angle_to_x" 	          field="azimuthal_angle_to_x" 		  parent="component_step_final_particle"/>-->
+<!--  <component_member name="lorentz_factor" 		              field="lorentz_factor" 			      parent="component_step_final_particle"/>-->
+<!--  <component_member name="speed"	 		                      field="speed"	 			              parent="component_step_final_particle"/>-->
+</ks_component_group>

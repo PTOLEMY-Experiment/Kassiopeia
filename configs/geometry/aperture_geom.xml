@@ -1,0 +1,109 @@
+<!--
+	Author: Wonyong Chung
+	Date: Aug 2018
+-->
+
+
+        <!-- Geometry parameters -->
+<!--<external_define name="y0"    value="0.0261799388"/>-->
+
+<!--<external_define name="catch_radius" value="0.02"/>-->
+<!--<external_define name="fence_radius" value="0.05"/>-->
+<!--<external_define name="zmin" value="-0.01"/>-->
+<!--<external_define name="zmax" value="0.5"/>-->
+<!--<external_define name="zcatch" value="0.4"/>-->
+
+<!--<external_define name="xworld1" value="-{[catch_radius]+0.1}"/>-->
+<!--<external_define name="xworld2" value="{[catch_radius]+0.1}"/>-->
+<!--<external_define name="yworld1" value="{[y0]+[catch_radius]+0.1}"/>-->
+<!--<external_define name="yworld2" value="{[y0]-[catch_radius]-0.1}"/>-->
+<!--<external_define name="zworld1" value="{[zmin]-0.1}"/>-->
+<!--<external_define name="zworld2" value="{[zmax]+0.1}"/>-->
+
+<geometry>
+
+<!-- world -->
+
+  <box_space name="box_space"
+             xa="[xworld1]"
+             xb="[xworld2]"
+             x_mesh_count="400"
+             x_mesh_power="1"
+             ya="[yworld1]"
+             yb="[yworld2]"
+             y_mesh_count="100"
+             y_mesh_power="1"
+             za="[zworld1]"
+             zb="[zworld2]"
+             z_mesh_count="1000"
+             z_mesh_power="1."/>
+
+  <!-- fence -->
+
+  <cylinder_surface name="xy_surface" z1="[zmin]" z2="[zmax]" r="[fence_radius]" longitudinal_mesh_count="100" longitudinal_mesh_power="2." axial_mesh_count="32"/>
+
+  <flattened_circle_surface name="zmin_surface" z="[zmin]" flattened_mesh_count="10" flattened_mesh_power="4.">
+    <circle x="0" y="0" radius="[fence_radius]" circle_mesh_count="128"/>
+  </flattened_circle_surface>
+
+  <flattened_circle_surface name="zmax_surface" z="[zmax]" flattened_mesh_count="10" flattened_mesh_power="4.">
+    <circle x="0" y="0" radius="[fence_radius]" circle_mesh_count="128"/>
+  </flattened_circle_surface>
+
+  <annulus_surface name="catcher_ring_surface" z="[zcatch]" r1="[catch_radius]" r2="[fence_radius]" radial_mesh_count="22" radial_mesh_power="1.5" axial_mesh_count="32"/>
+
+  <flattened_circle_surface name="catcher_surface" z="[zcatch]" flattened_mesh_count="10" flattened_mesh_power="4.">
+    <circle x="0" y="0" radius="[catch_radius]" circle_mesh_count="128"/>
+  </flattened_circle_surface>
+
+  <!-- spaces -->
+
+  <space name="fence_assembly">
+      <surface name="xy_fence" node="xy_surface"/>
+      <surface name="zmin_fence" node="zmin_surface"/>
+      <surface name="zmax_fence" node="zmax_surface"/>
+  </space>
+
+  <space name="catcher_assembly">
+    <surface name="catcher" node="catcher_surface">
+    </surface>
+    <surface name="catcher_ring" node="catcher_ring_surface">
+    </surface>
+  </space>
+
+  <space name="world" node="box_space">
+    <space name="fence"   tree="fence_assembly">
+      <transformation displacement="0 [y0] 0"/>
+    </space>
+    <space name="catcher" tree="catcher_assembly">
+      <transformation displacement="0 [y0] 0"/>
+    </space>
+  </space>
+
+  <!-- appearance -->
+
+  <!-- red -->
+  <appearance name="app_electrode" color="255   0   0 127" arc="72" surfaces="world/catcher/catcher"/>
+
+  <!-- yellow -->
+  <appearance name="app_electrode" color="255 255   0 128" arc="72" surfaces="world/catcher/catcher_ring"/>
+
+<!--   green -->
+<!--  <appearance name="app_electrode" color="  0 255   0 129" arc="72" surfaces="world/catcher/catcher3"/>-->
+
+  <!-- blue -->
+<!--  <appearance name="app_electrode" color="  0   0 255 10" arc="72" surfaces="world/fence/#"/>-->
+
+  <!-- purple -->
+<!--  <appearance name="app_electrode" color="255   0 255 131" arc="72" surfaces="world/catcher/catcher5"/>-->
+
+  <!-- brown -->
+  <appearance name="app_electrode" color="  0 255 255 10" arc="72" surfaces="world/fence/#"/>
+
+  <!-- gray -->
+  <appearance name="app_electrode" color="0 0 0 0" arc="72" surfaces="world/box_space"/>
+
+  <mesh name="world_mesh" surfaces="world/#"/>
+
+</geometry>
+

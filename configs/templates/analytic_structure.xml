@@ -1,0 +1,86 @@
+<kassiopeia>
+
+    <!-- trajectories-->
+    <kstraj_trajectory_exact name="trajectory_exact">
+        <interpolator_crk name="interpolator_crk"/>
+        <integrator_rk8 name="integrator_rk8"/>
+        <!--		<integrator_rk54 name="integrator_rk54"/>-->
+
+        <term_propagation name="term_propagation"/>
+        <!-- <term_synchrotron name="term_synchrotron"/> -->
+        <control_length name="stepsizelength" length="1e-5"/>
+        <control_cyclotron name="control_cyclotron_1_64" fraction="{1. / 64.}"/>
+        <control_position_error name="control_position_error" absolute_position_error="1e-12" safety_factor="0.75" solver_order="8"/>
+        <!-- <control_time name="control_time" time="1.e-3"/> -->
+        <control_time name="control_time" time="5.e-9"/>
+    </kstraj_trajectory_exact>
+
+    <!-- space navigators -->
+    <ksnav_space name="nav_space" enter_split="false" exit_split="false"/>
+
+    <!-- surface navigators -->
+    <ksnav_surface name="nav_surface" transmission_split="false" reflection_split="false"/>
+
+    <!-- terminators -->
+    <ksterm_max_steps name="term_max_steps" steps="[n_steps]"/>
+    <ksterm_xrange name="term_xrange" xmin="[xworld1]" xmax="[xworld2]"/>
+    <ksterm_yrange name="term_yrange" ymin="[yworld1]" ymax="[yworld2]"/>
+    <ksterm_zrange name="term_zrange" zmin="[zworld1]" zmax="[zworld2]"/>
+
+    <ksterm_death name="term_xy"/>
+    <ksterm_death name="term_zmax"/>
+    <ksterm_death name="term_zmin"/>
+    <ksterm_death name="term_catcher_ring"/>
+    <ksterm_death name="term_catcher"/>
+
+    <!-- writers -->
+
+    <kswrite_root name="write_root" path="[output_path]" base="[filename].root"/>
+
+    <if condition="{[writevtk] eq 1}">
+        <kswrite_vtk name="write_vtk" path="[output_path]" base="[filename].vtp"/>
+    </if>
+
+    <include name="[simdir]/templates/output.xml"/>
+
+
+    <!-- structure -->
+
+    <ksgeo_space name="space_world" spaces="world">
+        <command parent="write_root" field="add_track_output"     child="component_track_world"/>
+
+        <if condition="{[writesteps] eq 1}">
+            <command parent="write_root" field="add_step_output"     child="component_step_world"/>
+        </if>
+
+        <if condition="{([writevtk] eq 1) && ([writesteps] eq 1)}">
+            <command parent="write_vtk" field="set_step_point" child="position"/>
+            <command parent="write_vtk" field="set_step_data"  child="kinetic_energy"/>
+        </if>
+
+        <add_terminator  parent="root_terminator" child="term_max_steps"/>
+        <add_terminator  parent="root_terminator" child="term_xrange"/>
+        <add_terminator  parent="root_terminator" child="term_yrange"/>
+        <add_terminator  parent="root_terminator" child="term_zrange"/>
+
+        <geo_surface name="surface_xy_fence" surfaces="world/fence/xy_fence">
+            <command parent="root_terminator" field="add_terminator"      child="term_xy"/>
+        </geo_surface>
+        <geo_surface name="surface_zmin_fence" surfaces="world/fence/zmin_fence">
+            <command parent="root_terminator" field="add_terminator"      child="term_zmin"/>
+        </geo_surface>
+        <geo_surface name="surface_zmax_fence" surfaces="world/fence/zmax_fence">
+            <command parent="root_terminator" field="add_terminator"      child="term_zmax"/>
+        </geo_surface>
+        <geo_surface name="surface_catcher_ring_fence" surfaces="world/catcher/catcher_ring">
+            <command parent="root_terminator" field="add_terminator"      child="term_catcher_ring"/>
+        </geo_surface>
+
+        <geo_surface name="surface_catcher_fence" surfaces="world/catcher/catcher">
+            <command parent="root_terminator" field="add_terminator"      child="term_catcher"/>
+        </geo_surface>
+
+    </ksgeo_space>
+
+
+</kassiopeia>

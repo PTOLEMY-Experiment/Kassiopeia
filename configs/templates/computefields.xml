@@ -1,0 +1,84 @@
+<kemfield>
+	<!-- fields -->
+	<!-- <ksfield_magnetic_expo name="B_expo" Bx="[bx0] [bx1] [bx2]"/> -->
+<!--	<import_magnetic_field name="importedB"	/>-->
+<!--	<import_electric_field name="importedE"	/>-->
+	<!-- <constant_magnetic_field name="magnetic_constant" field="1. 0. 0."/> -->
+
+ 	<electrostatic_field
+		name="field_electrostatic"
+		directory="[KEMFIELD_CACHE]"
+		file="[geometry_file].kbd"
+		system="world"
+		surfaces="world/filter_space/#"
+		symmetry="none"
+		minimum_element_area="1e-12"
+		maximum_element_aspect_ratio="50">
+
+		<viewer
+			file="filter_geometry_viewer.vtp"
+			view="false"
+			save="true"
+			preprocessing="true"
+			postprocessing="true"/>
+		<krylov_bem_solver
+			solver_name="gmres"
+			preconditioner="implicit_krylov"
+			tolerance="2e-9"
+			preconditioner_tolerance="0.01"
+			max_iterations="500"
+			max_preconditioner_iterations="30"
+			iterations_between_restarts="250"
+			preconditioner_degree="1"
+			intermediate_save_interval="1"
+			use_display="true"
+			show_plot="false"
+			use_timer="true">
+			<fftm_multiplication
+				verbosity="3"
+				strategy="balanced"
+				top_level_divisions="10"
+				tree_level_divisions="4"
+				expansion_degree="7"
+				bias_degree="1"
+				neighbor_order="1"
+				maximum_tree_depth="9"
+				use_region_size_estimation="true"
+				use_caching="true"
+				region_expansion_factor="1.1"
+				insertion_ratio="1.3333333"
+				world_cube_center_x="0.0"
+				world_cube_center_y="0.0"
+				world_cube_center_z="0.0"
+				world_cube_length="0.0"/>
+			<preconditioner_electrostatic_parameters
+				verbosity="3"
+				top_level_divisions="4"
+				tree_level_divisions="3"
+				expansion_degree="0"
+				neighbor_order="1"
+				maximum_tree_depth="5"
+				use_region_size_estimation="true"
+				use_caching="true"
+				region_expansion_factor="1.1"
+				insertion_ratio="1.3333333"
+				world_cube_center_x="0.0"
+				world_cube_center_y="0.0"
+				world_cube_center_z="0.0"
+				world_cube_length="0.0"/>
+		</krylov_bem_solver>
+
+		<integrating_field_solver/>
+ 		<fast_multipole_field_solver
+			top_level_divisions="10"
+			tree_level_divisions="4"
+			expansion_degree="8"
+			neighbor_order="1"
+			maximum_tree_depth="6"
+			region_expansion_factor="2"
+			use_region_size_estimation="true"
+			use_caching="true"
+			verbosity="3"
+			use_opencl="true"/>
+	</electrostatic_field>
+</kemfield>

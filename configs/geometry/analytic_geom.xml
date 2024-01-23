@@ -1,0 +1,147 @@
+<!--
+	Author: Wonyong Chung
+	Date: Aug 2018
+-->
+
+<external_define name="y"    value="0.0261799388"/>
+<external_define name="ywindow" value="0.01"/>
+
+        <!-- Geomtry parameters -->
+<external_define name="xlim" value="0.01"/>
+<external_define name="ymin" value="{[y]-[ywindow]}"/>
+<external_define name="ymax" value="{[y]+[ywindow]}"/>
+<external_define name="zmin" value="-0.01"/>
+<external_define name="zmax" value="0.5"/>
+
+<external_define name="zcatchstart" value="0.4"/>
+<external_define name="zcatchend"   value="0.42"/>
+
+
+<geometry>
+
+<!-- world -->
+
+  <box_space name="box_space"
+             xa="-{[xlim]+0.1}"
+             xb="{[xlim]+0.1}"
+             x_mesh_count="400"
+             x_mesh_power="1"
+             ya="{[ymin]-0.1}"
+             yb="{[ymax]+0.1}"
+             y_mesh_count="100"
+             y_mesh_power="1"
+             za="{[zmin]-0.1}"
+             zb="{[zmax]+0.1}"
+             z_mesh_count="1000"
+             z_mesh_power="1."/>
+
+  <!-- fence -->
+
+  <cylinder_surface name="xy_surface" z1="[zmin]" z2="[zmax]" r="{4*[xlim]}" longitudinal_mesh_count="100" longitudinal_mesh_power="2." axial_mesh_count="32"/>
+
+  <flattened_circle_surface name="zmin_surface" z="[zmin]" flattened_mesh_count="10" flattened_mesh_power="4.">
+    <circle x="0" y="0" radius="{4*[xlim]}" circle_mesh_count="128"/>
+  </flattened_circle_surface>
+
+  <flattened_circle_surface name="zmax_surface" z="[zmax]" flattened_mesh_count="10" flattened_mesh_power="4.">
+    <circle x="0" y="0" radius="{4*[xlim]}" circle_mesh_count="128"/>
+  </flattened_circle_surface>
+
+<!--  <extruded_poly_loop_surface  name="xy_surface" zmin="[zmin]" zmax="[zmax]" extruded_mesh_count="100" extruded_mesh_power="1">-->
+<!--      <poly_loop>-->
+<!--          <start_point x="-[xlim]" y="[ymin]"/>-->
+<!--          <next_line x="[xlim]" y="[ymin]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--          <next_line x="[xlim]" y="[ymax]" line_mesh_count="4" line_mesh_power="1"/>-->
+<!--          <next_line x="-[xlim]" y="[ymax]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--          <last_line line_mesh_count="4" line_mesh_power="4"/>-->
+<!--      </poly_loop>-->
+<!--  </extruded_poly_loop_surface>-->
+
+<!--  <flattened_poly_loop_surface name="zmin_surface" z="[zmin]" flattened_mesh_count="40" flattened_mesh_power="1">-->
+<!--      <poly_loop>-->
+<!--          <start_point x="-[xlim]" y="[ymin]"/>-->
+<!--          <next_line x="[xlim]" y="[ymin]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--          <next_line x="[xlim]" y="[ymax]" line_mesh_count="4" line_mesh_power="1"/>-->
+<!--          <next_line x="-[xlim]" y="[ymax]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--          <last_line line_mesh_count="4" line_mesh_power="4"/>-->
+<!--      </poly_loop>-->
+<!--  </flattened_poly_loop_surface>-->
+
+<!--  <flattened_poly_loop_surface name="zmax_surface" z="[zmax]" flattened_mesh_count="40" flattened_mesh_power="1">-->
+<!--      <poly_loop>-->
+<!--          <start_point x="-[xlim]" y="[ymin]"/>-->
+<!--          <next_line x="[xlim]" y="[ymin]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--          <next_line x="[xlim]" y="[ymax]" line_mesh_count="4" line_mesh_power="1"/>-->
+<!--          <next_line x="-[xlim]" y="[ymax]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--          <last_line line_mesh_count="4" line_mesh_power="4"/>-->
+<!--      </poly_loop>-->
+<!--  </flattened_poly_loop_surface>-->
+
+<!--  <flattened_poly_loop_surface name="catcher_surface" z="0" flattened_mesh_count="40" flattened_mesh_power="1">-->
+<!--    <poly_loop>-->
+<!--      <start_point x="0" y="-[ywindow]"/>-->
+<!--      <next_line x="{[zcatchend]-[zcatchstart]}" y="-[ywindow]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--      <next_line x="{[zcatchend]-[zcatchstart]}" y="[ywindow]" line_mesh_count="4" line_mesh_power="1"/>-->
+<!--      <next_line x="0" y="[ywindow]" line_mesh_count="10" line_mesh_power="1"/>-->
+<!--      <last_line line_mesh_count="4" line_mesh_power="4"/>-->
+<!--    </poly_loop>-->
+<!--  </flattened_poly_loop_surface>-->
+
+  <flattened_circle_surface name="catcher_surface" z="[zcatchstart]" flattened_mesh_count="10" flattened_mesh_power="4.">
+    <circle x="0" y="0" radius="[xlim]" circle_mesh_count="128"/>
+  </flattened_circle_surface>
+
+  <annulus_surface name="catcher_ring_surface" z="[zcatchstart]" r1="[xlim]" r2="{4*[xlim]}" radial_mesh_count="22" radial_mesh_power="1.5" axial_mesh_count="32"/>
+
+  <!-- spaces -->
+
+  <space name="fence_assembly">
+      <surface name="xy_fence" node="xy_surface"/>
+      <surface name="zmin_fence" node="zmin_surface"/>
+      <surface name="zmax_fence" node="zmax_surface"/>
+  </space>
+
+  <space name="catcher_assembly">
+    <surface name="catcher" node="catcher_surface">
+<!--      <transformation rotation_euler="0. 90. 90."/>-->
+    </surface>
+    <surface name="catcher_ring" node="catcher_ring_surface">
+    </surface>
+  </space>
+
+  <space name="world" node="box_space">
+    <space name="fence"   tree="fence_assembly">
+      <transformation displacement="0 [y] 0"/>
+    </space>
+    <space name="catcher" tree="catcher_assembly">
+      <transformation displacement="0 [y] 0"/>
+    </space>
+  </space>
+
+  <!-- appearance -->
+
+  <!-- red -->
+  <appearance name="app_electrode" color="255   0   0 127" arc="72" surfaces="world/catcher/catcher"/>
+
+  <!-- yellow -->
+  <appearance name="app_electrode" color="255 255   0 128" arc="72" surfaces="world/catcher/catcher_ring"/>
+
+<!--   green -->
+<!--  <appearance name="app_electrode" color="  0 255   0 129" arc="72" surfaces="world/catcher/catcher3"/>-->
+
+  <!-- blue -->
+<!--  <appearance name="app_electrode" color="  0   0 255 130" arc="72" surfaces="world/catcher/catcher_orig"/>-->
+
+  <!-- purple -->
+<!--  <appearance name="app_electrode" color="255   0 255 131" arc="72" surfaces="world/catcher/catcher5"/>-->
+
+  <!-- brown -->
+<!--  <appearance name="app_electrode" color="  0 255 255 127" arc="72" surfaces="world/catcher/catcher1"/>-->
+
+  <!-- gray -->
+<!--  <appearance name="app_electrode" color="127 127 127 127" arc="72" surfaces="world/catcher/catcher1"/>-->
+
+  <mesh name="world_mesh" surfaces="world/#"/>
+
+</geometry>
+

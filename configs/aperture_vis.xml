@@ -1,0 +1,146 @@
+<!--
+	Author: Wonyong Chung
+	Date: March 2023
+-->
+
+<!-- Simulation parameters -->
+
+<external_define name="simdir" value="/home/wonyongc/src/Kassiopeia/sim"/>
+<external_define name="log_path" value="[simdir]/log/Kassiopeia"/>
+<external_define name="output_path" value="[simdir]/output/Kassiopeia"/>
+
+<external_define name="run_id" value="0"/>
+<external_define name="seed" value="78797"/>
+<external_define name="events" value="1"/>
+<external_define name="n_steps" value="3000000"/>
+
+<external_define name="writesteps" value="1"/>
+<external_define name="writevtk" value="1"/>
+<external_define name="showvtk" value="1"/>
+
+<!-- Transverse field parameters -->
+<external_define name="TKE" value="-37200"/>
+<external_define name="B0" value="1"/>
+<external_define name="lambda" value="0.05"/>
+
+<!-- Parallel E field parameters (k, D, x0) -->
+<external_define name="epar0" value="0"/>
+<external_define name="epar1" value="0.005"/>
+<external_define name="epar2" value="0"/>
+
+<!-- Initial state of electron-->
+<external_define name="phi" value="90"/>
+
+<external_define name="theta" value="90"/>
+<external_define name="thetamin" value="0"/>
+<external_define name="thetamax" value="355"/>
+<external_define name="thetacount" value="1"/>
+
+<external_define name="KE" value="18600"/>
+<external_define name="KEmin" value="18601"/>
+<external_define name="KEmax" value="18603"/>
+<external_define name="KEcount" value="10"/>
+
+<external_define name="x" value="0"/>
+<external_define name="z" value="0"/>
+
+<external_define name="y0"    value="0.0261799388"/>
+<external_define name="y0min" value="-0.2"/>
+<external_define name="y0max" value="0.2"/>
+<external_define name="y0count" value="81"/>
+
+<!-- Geometry parameters -->
+<external_define name="catch_radius" value="0.01"/>
+<external_define name="fence_radius" value="{4*[catch_radius]}"/>
+<external_define name="zmin" value="-0.01"/>
+<external_define name="zmax" value="0.5"/>
+<external_define name="zcatch" value="0.4"/>
+
+<external_define name="xworld1" value="{-[catch_radius]-0.1}"/>
+<external_define name="xworld2" value="{[catch_radius]+0.1}"/>
+<external_define name="yworld1" value="{[y0]-[catch_radius]-0.1}"/>
+<external_define name="yworld2" value="{[y0]+[catch_radius]+0.1}"/>
+<external_define name="zworld1" value="{[zmin]-0.1}"/>
+<external_define name="zworld2" value="{[zmax]+0.1}"/>
+
+<!-- Filename -->
+<external_define name="filename" value="aperture_[B0]T:[TKE]:[lambda]_z[zcatch]r[catch_radius]_y0fixed_th[thetamin]:[thetamax]:[thetacount]_KE[KEmin]:[KEmax]:[KEcount]"/>
+
+<include name="[simdir]/templates/messages.xml"/>
+<include name="[simdir]/geometry/aperture_geom.xml"/>
+<include name="[simdir]/templates/analytic_structure.xml"/>
+
+<kemfield>
+  <expo_magnetic_field name="B_expo" B0="[B0]" lambda="[lambda]"/>
+  <expo_electric_field name="E_expo" TKE="[TKE]" B0="1" lambda="[lambda]"/>
+</kemfield>
+
+<kassiopeia>
+  <!-- generators -->
+  <ksgen_generator_composite name="generator_uniform" pid="11">
+
+    <energy_composite>
+<!--      <energy_fix value="[KE]"/>-->
+      <energy_set name="ke_set" value_start="[KEmin]" value_stop="[KEmax]" value_count="[KEcount]"/>
+    </energy_composite>
+
+    <position_rectangular_composite>
+      <x_fix value="[x]"/>
+      <y_fix value="[y0]"/>
+<!--      <y_set name="y_set" value_start="[ymin]" value_stop="[ymax]" value_count="[ycount]"/>-->
+      <z_fix value="[z]"/>
+    </position_rectangular_composite>
+
+    <direction_spherical_composite>
+<!--      <theta_fix value="[theta]"/>-->
+      <theta_set name="theta_set" value_start="[thetamin]" value_stop="[thetamax]" value_count="[thetacount]"/>
+      <phi_fix value="[phi]"/>
+    </direction_spherical_composite>
+
+    <time_composite>
+      <time_fix value="0"/>
+    </time_composite>
+
+  </ksgen_generator_composite>
+
+  <!-- simulation -->
+  <if condition="{[writevtk] eq 1}">
+    <ks_simulation
+        run="[run_id]"
+        seed="[seed]"
+        events="[events]"
+        magnetic_field="B_expo"
+        electric_field="E_expo"
+        space="space_world"
+        generator="generator_uniform"
+        trajectory="trajectory_exact"
+        space_navigator="nav_space"
+        surface_navigator="nav_surface"
+        writer="write_root"
+        writer="write_vtk"
+    />
+  </if>
+
+  <if condition="{[writevtk] eq 0}">
+    <ks_simulation
+            run="[run_id]"
+            seed="[seed]"
+            events="[events]"
+            magnetic_field="B_expo"
+            electric_field="E_expo"
+            space="space_world"
+            generator="generator_uniform"
+            trajectory="trajectory_exact"
+            space_navigator="nav_space"
+            surface_navigator="nav_surface"
+            writer="write_root"
+    />
+  </if>
+
+  </kassiopeia>
+
+<if condition="{([showvtk] eq 1) && ([writesteps] eq 1)}">
+  <include name="[simdir]/templates/vtk_window.xml"/>
+</if>
+
+

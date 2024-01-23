@@ -1,0 +1,93 @@
+<kassiopeia>
+
+    <!-- trajectories-->
+    <kstraj_trajectory_exact name="trajectory_exact">
+        <interpolator_crk name="interpolator_crk"/>
+        <integrator_rk8 name="integrator_rk8"/>
+<!--        <integrator_rk54 name="integrator_rk54"/>-->
+
+        <term_propagation name="term_propagation"/>
+        <!-- <term_synchrotron name="term_synchrotron"/> -->
+        <control_length name="stepsizelength" length="1e-5"/>
+        <control_cyclotron name="control_cyclotron_1_64" fraction="{1. / 64.}"/>
+        <control_position_error name="control_position_error" absolute_position_error="1e-12" safety_factor="0.75" solver_order="8"/>
+        <!-- <control_time name="control_time" time="1.e-3"/> -->
+        <control_time name="control_time" time="5.e-9"/>
+    </kstraj_trajectory_exact>
+
+    <!-- space navigators -->
+    <ksnav_space name="nav_space" enter_split="false" exit_split="false"/>
+
+    <!-- surface navigators -->
+    <ksnav_surface name="nav_surface" transmission_split="false" reflection_split="false"/>
+
+    <!-- terminators -->
+    <ksterm_xrange name="term_xrange" xmin="-0.053" xmax="0.053"/>
+    <ksterm_yrange name="term_yrange" ymin="-0.05" ymax="0.05"/>
+    <ksterm_zrange name="term_zrange" zmin="-0.4" zmax="0.468"/>
+
+    <ksterm_max_steps name="term_max_steps" steps="[n_steps]"/>
+
+    <ksterm_death name="term_fence"/>
+    <ksterm_death name="term_catcher"/>
+
+    <!-- writers -->
+    <kswrite_root name="write_root" path="[output_path]" base="[filename].root"/>
+    <!-- <kswrite_vtk name="write_vtk" path="[output_path]" base="[filename].VTP"/> -->
+    <include name="[simdir]/templates/output.xml"/>
+
+
+    <!-- structure -->
+
+    <ksgeo_space name="space_world" spaces="world">
+
+        <add_terminator  parent="root_terminator" child="term_max_steps"/>
+        <add_terminator  parent="root_terminator" child="term_xrange"/>
+        <add_terminator  parent="root_terminator" child="term_yrange"/>
+        <add_terminator  parent="root_terminator" child="term_zrange"/>
+
+        <command parent="write_root" field="add_step_output"     child="component_step_world"/>
+        <command parent="write_root" field="add_track_output"     child="component_track_world"/>
+
+        <!-- <command parent="write_vtk" field="set_step_point" child="component_step_position"/> -->
+        <!-- <command parent="write_vtk" field="set_step_data" child="component_step_length"/> -->
+
+        <geo_surface name="surface_filter" surfaces="world/filter/fe_space/#">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+        <geo_surface name="surface_bounce" surfaces="world/filter/bounce_space/#">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+        <geo_surface name="surface_wire" surfaces="world/filter/wire_space/#">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+        <geo_surface name="surface_tr" surfaces="world/filter/tr_space/#">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+
+        <geo_surface name="surface_xy_fence" surfaces="world/fence/xy_fence">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+        <geo_surface name="surface_zmin_fence" surfaces="world/fence/zmin_fence">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+        <geo_surface name="surface_zmax_fence" surfaces="world/fence/zmax_fence">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+
+        <geo_surface name="surface_elens1_fence" surfaces="world/filter/elens_space/elens1_surface">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+        <!-- 		<geo_surface name="surface_elens2_fence" surfaces="world/filter/elens_space/elens2_surface">
+                    <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+                </geo_surface>
+                <geo_surface name="surface_elens3_fence" surfaces="world/filter/elens_space/elens3_surface">
+                    <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+                </geo_surface> -->
+
+        <geo_surface name="surface_calorimeter_fence" surfaces="world/filter/calorimeter_space/#">
+            <command parent="root_terminator" field="add_terminator"      child="term_fence"/>
+        </geo_surface>
+    </ksgeo_space>
+
+</kassiopeia>

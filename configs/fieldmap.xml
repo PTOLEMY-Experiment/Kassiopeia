@@ -1,0 +1,172 @@
+<!--
+	Author: Wonyong Chung
+	Date: March 2023
+-->
+
+<external_define name="simdir" value="/home/wonyongc/src/Kassiopeia/sim"/>
+<external_define name="log_path" value="[simdir]/log/Kassiopeia"/>
+<external_define name="output_path" value="[simdir]/output/Kassiopeia"/>
+
+<!-- Geomtry parameters -->
+<external_define name="xlim" value="0.01"/>
+<external_define name="ylim" value="0.2"/>
+<external_define name="zmin" value="-0.02"/>
+<external_define name="zmax" value="1"/>
+
+<!-- Simulation parameters -->
+<external_define name="run_id" value="0"/>
+<external_define name="seed" value="78797"/>
+<external_define name="output_file" value="fieldmap"/>
+<external_define name="events" value="1"/>
+<external_define name="n_steps" value="10"/>
+
+<!-- B field parameters (B0, lambda, N/A)-->
+<external_define name="bx0" value="1"/>
+<external_define name="bx1" value="0.05"/>
+<external_define name="bx2" value="0"/>
+
+<!-- E field parameters (E0, lambda, N/A) -->
+<external_define name="ey0" value="-18600"/>
+<external_define name="ey1" value="0.05"/>
+<external_define name="ey2" value="0.07853981633"/>
+
+<!-- Parallel E field parameters (k, D, x0) -->
+<external_define name="epar0" value="0"/>
+<external_define name="epar1" value="0.005"/>
+<external_define name="epar2" value="0"/>
+
+<!-- Initial state of electron-->
+<external_define name="phi" value="90"/>
+<external_define name="theta" value="270"/>
+<external_define name="thetamin" value="0"/>
+<external_define name="thetamax" value="270"/>
+<external_define name="thetacount" value="4"/>
+<external_define name="x" value="0"/>
+
+<external_define name="single_y" value="1"/>
+<external_define name="scan_y" value="0"/>
+
+<!--<external_define name="y"    value="0.07853981633"/>-->
+<!--<external_define name="ymin" value="0.07215"/>-->
+<!--<external_define name="ymax" value="0.0723"/>-->
+
+<external_define name="y"    value="0.072"/>
+<external_define name="ymin" value="0.07205"/>
+<external_define name="ymax" value="0.07215"/>
+
+<external_define name="ycount" value="11"/>
+<external_define name="z" value="0"/>
+
+
+<if condition="{[single_y] eq 1}">
+  <external_define name="filename" value="[output_file]_[y]"/>
+</if>
+
+<if condition="{[scan_y] eq 1}">
+  <external_define name="filename" value="[output_file]_[ymin]_[ymax]"/>
+</if>
+
+<include name="[simdir]/templates/messages.xml"/>
+<include name="[simdir]/geometry/flat_world_geom.xml"/>
+<include name="[simdir]/templates/structure_analytical.xml"/>
+
+
+<kemfield>
+
+<expo_magnetic_field name="B_expo" Bx="[bx0] [bx1] [bx2]"/>
+<expo_electric_field name="E_expo"  Ey="[ey0] [ey1] [ey2]" Epar="[epar0] [epar1] [epar2]"/>
+
+
+
+<magnetic_fieldmap_calculator
+        name="b_fieldmap_calculator"
+        field="B_expo"
+        file="B_expo.vti"
+        directory="[output_path]"
+        force_update="yes"
+        compute_gradient="false"
+        center="0 0 0"
+        length="0.2 0.5 1.0"
+        spacing="0.001 0.001 0.001"
+        mirror_x="false"
+        mirror_y="false"
+        mirror_z="false"
+/>
+
+<electric_potentialmap_calculator
+        name="e_fieldmap_calculator"
+        field="E_expo"
+        file="E_expo.vti"
+        directory="[output_path]"
+        force_update="yes"
+        compute_field="true"
+        center="0 0 0"
+        length="0.2 0.5 1.0"
+        spacing="0.001 0.001 0.001"
+        mirror_x="false"
+        mirror_y="false"
+        mirror_z="false"
+/>
+
+</kemfield>
+
+
+<kassiopeia>
+
+
+  <!-- generators -->
+
+  <ksgen_generator_composite name="generator_uniform" pid="11">
+
+    <energy_composite>
+      <energy_fix value="18600."/>
+    </energy_composite>
+
+    <position_rectangular_composite>
+      <x_fix value="[z]"/>
+
+      <if condition="{[single_y] eq 1}">
+        <y_fix value="[y]"/>
+      </if>
+      <if condition="{[scan_y] eq 1}">
+        <y_set name="y_set" value_start="[ymin]" value_stop="[ymax]" value_count="[ycount]"/>
+      </if>
+
+      <z_fix value="[x]"/>
+    </position_rectangular_composite>
+
+    <direction_spherical_composite>
+      <theta_fix value="[theta]"/>
+        <!--      <theta_set name="theta_set" value_start="[thetamin]" value_stop="[thetamax]" value_count="[thetacount]"/>-->
+      <phi_fix value="[phi]"/>
+    </direction_spherical_composite>
+
+    <time_composite>
+      <time_fix value="0"/>
+    </time_composite>
+
+  </ksgen_generator_composite>
+
+  <!-- simulation -->
+
+  <ks_simulation
+      run="[run_id]"
+      seed="[seed]"
+      events="[events]"
+      magnetic_field="B_expo"
+      electric_field="E_expo"
+      space="space_world"
+      generator="generator_uniform"
+      trajectory="trajectory_exact"
+      space_navigator="nav_space"
+      surface_navigator="nav_surface"
+      writer="write_root"
+      writer="write_vtk"
+      />
+
+</kassiopeia>
+
+
+<!--<include name="[simdir]/templates/vtk_window.xml"/>-->
+
+

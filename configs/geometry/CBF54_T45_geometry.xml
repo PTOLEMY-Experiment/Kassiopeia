@@ -1,0 +1,1100 @@
+<!--
+	Author: Wonyong Chung
+	Date: May 2022
+	B field: arm32_c1900x25n
+	Pitch 85 config
+-->
+<external_define name="n_filter_electrodes" value="113"/>
+<external_define name="n_tr_electrodes" value="40"/>
+
+
+<external_define name="fchy" value="0.015"/>
+<external_define name="egap" value="0.001"/>
+
+
+<external_define name="fewidth" value="0.004"/>
+<external_define name="festep" value="{[fewidth]+[egap]}"/>
+
+<external_define name="filter_z_start" value="-0.2"/>
+<external_define name="filter_z_end" value="{[filter_z_start]+[n_filter_electrodes]*[festep]-[egap]}"/>
+
+<external_define name="fe_halfx" value="0.017"/>
+
+<external_define name="bounce_x_end" value="{3*[fe_halfx]+[egap]}"/>
+<external_define name="bounce_x_start" value="{[bounce_x_end]-3*[egap]}"/>
+<external_define name="bounce_y_halfwidth" value="{[fchy]-3*[egap]}"/>
+
+
+<external_define name="xlim" value="0.053"/>
+<external_define name="ylim" value="0.05"/>
+
+<external_define name="zmin" value="-0.4"/>
+<external_define name="zmax" value="0.468"/>
+
+
+<geometry>
+
+	<!-- world -->
+
+	<box_space name="box_space"
+		xa="-0.3"
+		xb="0.3"
+		x_mesh_count="400"
+		x_mesh_power="1"
+		ya="-0.1"
+		yb="0.1"
+		y_mesh_count="100"
+		y_mesh_power="1"
+		za="-0.4"
+		zb="0.6"
+		z_mesh_count="1000"
+		z_mesh_power="1."/>
+
+
+	<!-- fence -->
+
+	<extruded_poly_loop_surface  name="xy_surface" zmin="[zmin]" zmax="[zmax]" extruded_mesh_count="100" extruded_mesh_power="1">
+	    <poly_loop>
+			<start_point x="-[xlim]" y="-[ylim]"/>
+			<next_line x="[xlim]" y="-[ylim]" line_mesh_count="10" line_mesh_power="1"/>
+			<next_line x="[xlim]" y="[ylim]" line_mesh_count="4" line_mesh_power="1"/>
+			<next_line x="-[xlim]" y="[ylim]" line_mesh_count="10" line_mesh_power="1"/>
+			<last_line line_mesh_count="4" line_mesh_power="4"/>
+	    </poly_loop>
+	</extruded_poly_loop_surface>
+
+	<flattened_poly_loop_surface name="zmin_surface" z="[zmin]" flattened_mesh_count="40" flattened_mesh_power="1">
+	    <poly_loop>
+			<start_point x="-[xlim]" y="-[ylim]"/>
+			<next_line x="[xlim]" y="-[ylim]" line_mesh_count="10" line_mesh_power="1"/>
+			<next_line x="[xlim]" y="[ylim]" line_mesh_count="4" line_mesh_power="1"/>
+			<next_line x="-[xlim]" y="[ylim]" line_mesh_count="10" line_mesh_power="1"/>
+			<last_line line_mesh_count="4" line_mesh_power="4"/>
+	    </poly_loop>
+	</flattened_poly_loop_surface>
+
+	<flattened_poly_loop_surface name="zmax_surface" z="[zmax]" flattened_mesh_count="40" flattened_mesh_power="1">
+	    <poly_loop>
+			<start_point x="-[xlim]" y="-[ylim]"/>
+			<next_line x="[xlim]" y="-[ylim]" line_mesh_count="10" line_mesh_power="1"/>
+			<next_line x="[xlim]" y="[ylim]" line_mesh_count="4" line_mesh_power="1"/>
+			<next_line x="-[xlim]" y="[ylim]" line_mesh_count="10" line_mesh_power="1"/>
+			<last_line line_mesh_count="4" line_mesh_power="4"/>
+	    </poly_loop>
+	</flattened_poly_loop_surface>
+
+
+
+	<!-- shapes -->
+
+	<tag name="fe_posy_tag">   
+
+		<extruded_poly_loop_surface  name="filter_electrode_surface_pos_y_x0" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-[fe_halfx]" y="[fchy]"/>
+				<next_line x="-[fe_halfx]" y="{[fchy]+[egap]}" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="[fe_halfx]" y="{[fchy]+[egap]}" line_mesh_count="20" line_mesh_power="1."/>
+				<next_line x="[fe_halfx]" y="[fchy]" line_mesh_count="2" line_mesh_power="1."/>
+				<last_line line_mesh_count="20" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="filter_electrode_surface_pos_y_x-1" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{-[fe_halfx]-[egap]-2*[fe_halfx]}" y="[fchy]"/>
+				<next_line x="{-[fe_halfx]-[egap]-2*[fe_halfx]}" y="{[fchy]+[egap]}" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]-[egap]-2*[fe_halfx]}" y="{[fchy]+[egap]}" line_mesh_count="20" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]-[egap]-2*[fe_halfx]}" y="[fchy]" line_mesh_count="2" line_mesh_power="1."/>
+				<last_line line_mesh_count="20" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="filter_electrode_surface_pos_y_x1" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{-[fe_halfx]+[egap]+2*[fe_halfx]}" y="[fchy]"/>
+				<next_line x="{-[fe_halfx]+[egap]+2*[fe_halfx]}" y="{[fchy]+[egap]}" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]+[egap]+2*[fe_halfx]}" y="{[fchy]+[egap]}" line_mesh_count="20" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]+[egap]+2*[fe_halfx]}" y="[fchy]" line_mesh_count="2" line_mesh_power="1."/>
+				<last_line line_mesh_count="20" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+	</tag>
+
+	<tag name="fe_negy_tag">   
+
+		<extruded_poly_loop_surface  name="filter_electrode_surface_neg_y_x-1" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{-[fe_halfx]-[egap]-2*[fe_halfx]}" y="-[fchy]"/>
+				<next_line x="{-[fe_halfx]-[egap]-2*[fe_halfx]}" y="{-([fchy]+[egap])}" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]-[egap]-2*[fe_halfx]}" y="{-([fchy]+[egap])}" line_mesh_count="20" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]-[egap]-2*[fe_halfx]}" y="-[fchy]" line_mesh_count="2" line_mesh_power="1."/>
+				<last_line line_mesh_count="20" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="filter_electrode_surface_neg_y_x0" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{-[fe_halfx]}" y="-[fchy]"/>
+				<next_line x="{-[fe_halfx]}" y="{-([fchy]+[egap])}" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]}" y="{-([fchy]+[egap])}" line_mesh_count="20" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]}" y="-[fchy]" line_mesh_count="2" line_mesh_power="1."/>
+				<last_line line_mesh_count="20" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="filter_electrode_surface_neg_y_x1" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{-[fe_halfx]+[egap]+2*[fe_halfx]}" y="-[fchy]"/>
+				<next_line x="{-[fe_halfx]+[egap]+2*[fe_halfx]}" y="{-([fchy]+[egap])}" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]+[egap]+2*[fe_halfx]}" y="{-([fchy]+[egap])}" line_mesh_count="20" line_mesh_power="1."/>
+				<next_line x="{[fe_halfx]+[egap]+2*[fe_halfx]}" y="-[fchy]" line_mesh_count="2" line_mesh_power="1."/>
+				<last_line line_mesh_count="20" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+	</tag>
+
+	<tag name="bounce_tag">   
+
+		<extruded_poly_loop_surface  name="bounce_electrode_surface_top" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="[bounce_x_start]" y="-[bounce_y_halfwidth]"/>
+				<next_line x="[bounce_x_start]" y="[bounce_y_halfwidth]" line_mesh_count="24" line_mesh_power="1."/>
+				<next_line x="[bounce_x_end]" y="[bounce_y_halfwidth]" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="[bounce_x_end]" y="-[bounce_y_halfwidth]" line_mesh_count="24" line_mesh_power="1."/>
+				<last_line line_mesh_count="2" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="bounce_electrode_surface_bot" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-[bounce_x_start]" y="-[bounce_y_halfwidth]"/>
+				<next_line x="-[bounce_x_start]" y="[bounce_y_halfwidth]" line_mesh_count="24" line_mesh_power="1."/>
+				<next_line x="-[bounce_x_end]" y="[bounce_y_halfwidth]" line_mesh_count="2" line_mesh_power="1."/>
+				<next_line x="-[bounce_x_end]" y="-[bounce_y_halfwidth]" line_mesh_count="24" line_mesh_power="1."/>
+				<last_line line_mesh_count="2" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+	</tag>
+
+	<tag name="wire_tag">   
+
+
+		<extruded_poly_loop_surface  name="wire_i0_posx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="0.051" y="0.013"/>
+				<next_line x="0.051" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="0.052" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="0.052" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i1_posx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.051-0.002}" y="0.013"/>
+				<next_line x="{0.051-0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.052-0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.052-0.002}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i2_posx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.017+0.002}" y="0.013"/>
+				<next_line x="{0.017+0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.003}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.003}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i3_posx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.017+0.0}" y="0.013"/>
+				<next_line x="{0.017+0.0}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.001}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.001}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i4_posx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.017-0.002}" y="0.013"/>
+				<next_line x="{0.017-0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017-0.001}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017-0.001}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+
+
+
+		<extruded_poly_loop_surface  name="wire_i0_negx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-0.051" y="0.013"/>
+				<next_line x="-0.051" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-0.052" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-0.052" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i1_negx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.051-0.002}" y="0.013"/>
+				<next_line x="-{0.051-0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.052-0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.052-0.002}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i2_negx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.017+0.002}" y="0.013"/>
+				<next_line x="-{0.017+0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.003}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.003}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i3_negx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.017+0.0}" y="0.013"/>
+				<next_line x="-{0.017+0.0}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.001}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.001}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i4_negx_posy" zmin="[filter_z_start]" zmax="{[filter_z_start]+[fewidth]}" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.017-0.002}" y="0.013"/>
+				<next_line x="-{0.017-0.002}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017-0.001}" y="0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017-0.001}" y="0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+
+
+
+		<extruded_poly_loop_surface  name="wire_i0_posx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="0.051" y="-0.013"/>
+				<next_line x="0.051" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="0.052" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="0.052" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i1_posx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.051-0.002}" y="-0.013"/>
+				<next_line x="{0.051-0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.052-0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.052-0.002}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i2_posx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.017+0.002}" y="-0.013"/>
+				<next_line x="{0.017+0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.003}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.003}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i3_posx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.017+0.0}" y="-0.013"/>
+				<next_line x="{0.017+0.0}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.001}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017+0.001}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i4_posx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="{0.017-0.002}" y="-0.013"/>
+				<next_line x="{0.017-0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017-0.001}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="{0.017-0.001}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+
+
+
+		<extruded_poly_loop_surface  name="wire_i0_negx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-0.051" y="-0.013"/>
+				<next_line x="-0.051" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-0.052" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-0.052" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i1_negx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.051-0.002}" y="-0.013"/>
+				<next_line x="-{0.051-0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.052-0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.052-0.002}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i2_negx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.017+0.002}" y="-0.013"/>
+				<next_line x="-{0.017+0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.003}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.003}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i3_negx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.017+0.0}" y="-0.013"/>
+				<next_line x="-{0.017+0.0}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.001}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017+0.001}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="wire_i4_negx_negy" zmin="[filter_z_start]" zmax="[filter_z_end]" extruded_mesh_count="1000" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-{0.017-0.002}" y="-0.013"/>
+				<next_line x="-{0.017-0.002}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017-0.001}" y="-0.014" line_mesh_count="1" line_mesh_power="1."/>
+				<next_line x="-{0.017-0.001}" y="-0.013" line_mesh_count="1" line_mesh_power="1."/>
+				<last_line line_mesh_count="1" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+	</tag>
+
+	<tag name="elens_tag">   
+		<external_define name="elens_z" value="{3*[festep]}"/>
+
+		<external_define name="elens1_z_start" value="{[filter_z_start]+[n_filter_electrodes]*[festep]}"/>
+		<external_define name="elens1_z_end" value="{[elens1_z_start]+5*[festep]}"/>
+
+		<external_define name="elens1_negy_length" value="0.026"/>
+		<external_define name="elens1_posy_length" value="0.056"/>
+
+
+		<flattened_poly_loop_surface name="elens1_negy" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0.017" y="0"/>
+				<next_line x="0.017" y="{0+[elens1_negy_length]}" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.017" y="{0+[elens1_negy_length]}" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.017" y="0" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="elens1_posy" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0.017" y="0"/>
+				<next_line x="0.017" y="{0+[elens1_posy_length]}" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="{1*(-0.017)}" y="{0+[elens1_posy_length]}" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="{1*(-0.017)}" y="0" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="elens1_posx" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0" y="0"/>
+				<next_line x="{0+([elens1_posy_length]-[elens1_negy_length])}" y="{0+0.03}" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="{-[elens1_negy_length]}" y="{0+0.03}" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="{-[elens1_negy_length]}" y="0" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+	</tag>
+
+
+	<tag name="calo_tag">
+
+		<external_define name="calorimeter_z" value="{9*[festep]}"/>
+
+
+		<external_define name="x1-1" value="-0.016"/>
+		<external_define name="x2-1" value="0.016"/>
+		<external_define name="y1-1" value="0"/>
+		<external_define name="y2-1" value="{2*0.014}"/>
+
+
+		<flattened_poly_loop_surface name="calorimeter_front" z="{[calorimeter_z]-0.001}" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="[x1-1]" y="[y1-1]"/>
+				<next_line x="[x1-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y1-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="calorimeter_edge" zmin="{[calorimeter_z]-0.001}" zmax="{[calorimeter_z]+0.001}" extruded_mesh_count="1" extruded_mesh_power="1">
+		    <poly_loop>
+				<start_point x="[x1-1]" y="[y1-1]"/>
+				<next_line x="[x1-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y1-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="calorimeter_back" z="{[calorimeter_z]+0.001}" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="[x1-1]" y="[y1-1]"/>
+				<next_line x="[x1-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y1-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+	</tag>
+
+	<tag name="tr_ramp_tag">   
+
+		<external_define name="side_a" value="{2*[fchy]-3*[egap]}"/>
+		<external_define name="side_b" value="{2*[fe_halfx]-4*[egap]}"/>
+
+		<external_define name="bounce_y_start_tr" value="{-[fchy]}"/>
+		<external_define name="bounce_y_end_tr" value="{[bounce_y_start_tr]+[side_a]/0.7071}"/>
+
+		<external_define name="bounce_x_start_tr" value="{[fe_halfx]+[egap]}"/>
+		<external_define name="bounce_x_end_tr" value="{[bounce_x_start_tr]+[egap]}"/>
+
+		<external_define name="tr_bounce_z_start" value="-0.3"/>
+		<external_define name="tr_bounce_z_end" value="-0.4"/>
+
+
+		<extruded_poly_loop_surface  name="tr_bounce_electrode_surface_top_0" zmin="[tr_bounce_z_end]" zmax="[tr_bounce_z_start]" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="[bounce_x_start_tr]" y="[bounce_y_start_tr]"/>
+				<next_line x="{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]}" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]-[side_a]/100}" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{[bounce_x_start_tr]+[egap]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{[bounce_x_start_tr]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+				<last_line line_mesh_count="10" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="tr_bounce_electrode_surface_bot_0" zmin="[tr_bounce_z_end]" zmax="[tr_bounce_z_start]" extruded_mesh_count="10" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-[bounce_x_start_tr]" y="[bounce_y_start_tr]"/>
+				<next_line x="-{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]}" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="-{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]-[side_a]/100}" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="-{[bounce_x_start_tr]+[egap]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="-{[bounce_x_start_tr]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+				<last_line line_mesh_count="10" line_mesh_power="1."/>
+			</poly_loop>
+		</extruded_poly_loop_surface>
+
+
+		<loop variable="i" start="1" end="99" step="1">
+
+			<extruded_poly_loop_surface  name="tr_bounce_electrode_surface_top_[i]" zmin="{[tr_bounce_z_start]+([i]-1)*0.001}" zmax="{[tr_bounce_z_start]+[i]*0.001}" extruded_mesh_count="10" extruded_mesh_power="1">
+				<poly_loop>
+					<start_point x="[bounce_x_start_tr]" y="[bounce_y_start_tr]"/>
+					<next_line x="{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]-[i]*[side_a]/100}" line_mesh_count="10" line_mesh_power="1."/>
+					<next_line x="{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]-([i]-1)*[side_a]/100}" line_mesh_count="10" line_mesh_power="1."/>
+					<next_line x="{[bounce_x_start_tr]+[egap]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+					<next_line x="{[bounce_x_start_tr]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+					<last_line line_mesh_count="10" line_mesh_power="1."/>
+				</poly_loop>
+			</extruded_poly_loop_surface>
+
+			<extruded_poly_loop_surface  name="tr_bounce_electrode_surface_bot_[i]" zmin="{[tr_bounce_z_start]+([i]-1)*0.001}" zmax="{[tr_bounce_z_start]+[i]*0.001}" extruded_mesh_count="10" extruded_mesh_power="1">
+				<poly_loop>
+					<start_point x="-[bounce_x_start_tr]" y="[bounce_y_start_tr]"/>
+					<next_line x="-{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]-[i]*[side_a]/100}" line_mesh_count="10" line_mesh_power="1."/>
+					<next_line x="-{[bounce_x_start_tr]+[side_b]}" y="{[bounce_y_start_tr]+[side_a]-([i]-1)*[side_a]/100}" line_mesh_count="10" line_mesh_power="1."/>
+					<next_line x="-{[bounce_x_start_tr]+[egap]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+					<next_line x="-{[bounce_x_start_tr]}" y="{[bounce_y_start_tr]-[egap]}" line_mesh_count="10" line_mesh_power="1."/>
+					<last_line line_mesh_count="10" line_mesh_power="1."/>
+				</poly_loop>
+			</extruded_poly_loop_surface>
+		</loop>
+	</tag>
+
+	<tag name="tr_bounce_tag">   
+
+		<flattened_poly_loop_surface name="tr_bounce_wedge_surface_top1" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0" y="-[bounce_y_halfwidth]"/>
+				<next_line x="0" y="[bounce_y_halfwidth]" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{0+0.1}" y="[bounce_y_halfwidth]" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{0+0.02}" y="-[bounce_y_halfwidth]" line_mesh_count="10" line_mesh_power="1."/>
+				<last_line line_mesh_count="10" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="tr_bounce_wedge_surface_top2" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0" y="-[bounce_y_halfwidth]"/>
+				<next_line x="0" y="[bounce_y_halfwidth]" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{0+0.1}" y="[bounce_y_halfwidth]" line_mesh_count="10" line_mesh_power="1."/>
+				<next_line x="{0+0.02}" y="-[bounce_y_halfwidth]" line_mesh_count="10" line_mesh_power="1."/>
+				<last_line line_mesh_count="10" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+	</tag>
+
+
+	<tag name="magnet_tag">
+
+		<flattened_poly_loop_surface name="magnet_front_bot_surface" z="-0.4" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="-0.4" y="-0.2"/>
+				<next_line x="-0.23" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.23" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_front_top_surface" z="-0.4" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0.4" y="-0.2"/>
+				<next_line x="0.23" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_back_bot_surface" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="-0.4" y="-0.2"/>
+				<next_line x="-0.23" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.23" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_back_top_surface" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="0.4" y="-0.2"/>
+				<next_line x="0.23" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="magnet_front_left_surface" z="-0.4" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="-0.23" y="-0.2"/>
+				<next_line x="-0.23" y="-0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="-0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_front_right_surface" z="-0.4" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="-0.23" y="0.2"/>
+				<next_line x="-0.23" y="0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_back_left_surface" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="-0.23" y="-0.2"/>
+				<next_line x="-0.23" y="-0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="-0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_back_right_surface" z="0" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="-0.23" y="0.2"/>
+				<next_line x="-0.23" y="0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="magnet_ped_front_top_surface" z="-0.4" flattened_mesh_count="10" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0.23" y="-0.05"/>
+				<next_line x="0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.06" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.06" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_ped_front_bot_surface" z="-0.4" flattened_mesh_count="10" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="-0.23" y="-0.05"/>
+				<next_line x="-0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.06" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.06" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="magnet_arm_back_top_surface" z="0.32" flattened_mesh_count="10" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0.23" y="-0.05"/>
+				<next_line x="0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+		<flattened_poly_loop_surface name="magnet_arm_back_bot_surface" z="0.32" flattened_mesh_count="10" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="-0.23" y="-0.05"/>
+				<next_line x="-0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface>
+
+
+		<extruded_poly_loop_surface  name="magnet_cavern_surface" zmin="-0.4" zmax="0" extruded_mesh_count="1" extruded_mesh_power="1">
+		    <poly_loop>
+				<start_point x="0.23" y="0.15"/>
+				<next_line x="-0.23" y="0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.23" y="-0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.23" y="-0.15" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="magnet_outer_surface" zmin="-0.4" zmax="0" extruded_mesh_count="1" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="0.4" y="0.2"/>
+				<next_line x="-0.4" y="0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="-0.2" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="magnet_ped_top_surface" zmin="-0.4" zmax="0" extruded_mesh_count="1" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="0.23" y="-0.05"/>
+				<next_line x="0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.06" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.06" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="magnet_ped_bot_surface" zmin="-0.4" zmax="0" extruded_mesh_count="1" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-0.23" y="-0.05"/>
+				<next_line x="-0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.06" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.06" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="magnet_arm_top_surface" zmin="0" zmax="0.32" extruded_mesh_count="1" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="0.23" y="-0.05"/>
+				<next_line x="0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="0.4" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+		<extruded_poly_loop_surface  name="magnet_arm_bot_surface" zmin="0" zmax="0.32" extruded_mesh_count="1" extruded_mesh_power="1">
+			<poly_loop>
+				<start_point x="-0.23" y="-0.05"/>
+				<next_line x="-0.23" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="-0.4" y="-0.05" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</extruded_poly_loop_surface>
+
+<!-- 
+		<flattened_poly_loop_surface name="calorimeter_back" z="{[calorimeter_z]+0.001}" flattened_mesh_count="10" flattened_mesh_power="1.">
+		    <poly_loop>
+				<start_point x="[x1-1]" y="[y1-1]"/>
+				<next_line x="[x1-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y2-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<next_line x="[x2-1]" y="[y1-1]" line_mesh_count="4" line_mesh_power="1."/>
+				<last_line line_mesh_count="4" line_mesh_power="1."/>
+		    </poly_loop>
+		</flattened_poly_loop_surface> -->
+
+	</tag>
+
+	<!-- assembly -->
+
+
+	<!-- spaces -->
+
+	<space name="fe_assembly">
+		<loop variable="i" start="0" end="{[n_filter_electrodes]-1}" step="1">
+
+			<tag name="fe_x1_posy_[i]">
+				<surface name="fe_x1_posy_[i]_surface" node="filter_electrode_surface_pos_y_x1">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="fe_x0_posy_[i]">
+				<surface name="fe_x0_posy_[i]_surface" node="filter_electrode_surface_pos_y_x0">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="fe_x-1_posy_[i]">
+				<surface name="fe_x-1_posy_[i]_surface" node="filter_electrode_surface_pos_y_x-1">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+
+			<tag name="fe_x1_negy_[i]">
+				<surface name="fe_x1_negy_[i]_surface" node="filter_electrode_surface_neg_y_x1">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="fe_x0_negy_[i]">
+				<surface name="fe_x0_negy_[i]_surface" node="filter_electrode_surface_neg_y_x0">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="fe_x-1_negy_[i]">
+				<surface name="fe_x-1_negy_[i]_surface" node="filter_electrode_surface_neg_y_x-1">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+		</loop>
+	</space>
+
+	<space name="bounce_assembly">
+		<tag name="bounce_electrodes">
+			<surface name="bounce_top_surface" node="bounce_electrode_surface_top" />
+			<surface name="bounce_bot_surface" node="bounce_electrode_surface_bot" />
+		</tag>
+	</space>
+
+	<external_define name="rotation_angle" value="45"/>
+	<external_define name="posy_distance" value="{0.0424-0.015}"/>
+
+	<space name="elens_assembly">
+		<tag name="elens1_tag">
+
+			<surface name="elens1_negy_surface" node="elens1_negy">
+				<transformation rotation_euler="0 {90+[rotation_angle]} 0"/>
+				<transformation displacement="0 -0.015 [elens1_z_start]"/>
+			</surface>
+			<surface name="elens1_posy_surface" node="elens1_posy">
+				<transformation rotation_euler="0 {90+[rotation_angle]} 0"/>
+				<transformation displacement="0 [posy_distance] [elens1_z_start]"/>
+			</surface>
+			<surface name="elens1_posx_surface" node="elens1_posx">
+				<transformation rotation_euler="90 90 {-(90-[rotation_angle])}"/>
+				<transformation displacement="{0.017} {1*(-0.015)} [elens1_z_start]"/>
+			</surface>
+			<surface name="elens1_negx_surface" node="elens1_posx">
+				<transformation rotation_euler="90 90 {-(90-[rotation_angle])}"/>
+				<transformation displacement="{-0.017} {1*(-0.015)} [elens1_z_start]"/>
+			</surface>
+
+		</tag>
+	</space>
+
+	<space name="calorimeter_assembly">
+		<tag name="calorimeter_tag">
+			<surface name="calorimeter_front_surface" node="calorimeter_front">
+				<transformation rotation_euler="0 [rotation_angle] 0"/>
+				<transformation displacement="0 -0.014 [elens1_z_start]"/>
+
+			</surface>
+			<surface name="calorimeter_edge_surface" node="calorimeter_edge">
+				<transformation rotation_euler="0 [rotation_angle] 0"/>
+				<transformation displacement="0 -0.014 [elens1_z_start]"/>
+
+			</surface>
+			<surface name="calorimeter_back_surface" node="calorimeter_back">
+				<transformation rotation_euler="0 [rotation_angle] 0"/>
+				<transformation displacement="0 -0.014 [elens1_z_start]"/>
+
+			</surface>
+		</tag>
+	</space>
+
+	<space name="fence_assembly">
+		<surface name="xy_fence" node="xy_surface"/>
+		<surface name="zmin_fence" node="zmin_surface"/>
+		<surface name="zmax_fence" node="zmax_surface"/>
+	</space>
+
+	<space name="wire_assembly">
+		<loop variable="i" start="0" end="{[n_filter_electrodes]-1}" step="1">
+
+			<tag name="wire_i0_posx_posy_[i]">
+				<surface name="wire_i0_posx_posy_[i]_surface" node="wire_i0_posx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i1_posx_posy_[i]">
+				<surface name="wire_i1_posx_posy_[i]_surface" node="wire_i1_posx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i2_posx_posy_[i]">
+				<surface name="wire_i2_posx_posy_[i]_surface" node="wire_i2_posx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i3_posx_posy_[i]">
+				<surface name="wire_i3_posx_posy_[i]_surface" node="wire_i3_posx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i4_posx_posy_[i]">
+				<surface name="wire_i4_posx_posy_[i]_surface" node="wire_i4_posx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+
+
+			<tag name="wire_i0_negx_posy_[i]">
+				<surface name="wire_i0_negx_posy_[i]_surface" node="wire_i0_negx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i1_negx_posy_[i]">
+				<surface name="wire_i1_negx_posy_[i]_surface" node="wire_i1_negx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i2_negx_posy_[i]">
+				<surface name="wire_i2_negx_posy_[i]_surface" node="wire_i2_negx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i3_negx_posy_[i]">
+				<surface name="wire_i3_negx_posy_[i]_surface" node="wire_i3_negx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+			<tag name="wire_i4_negx_posy_[i]">
+				<surface name="wire_i4_negx_posy_[i]_surface" node="wire_i4_negx_posy">
+					<transformation displacement="0. 0. {[i]*[festep]}"/>
+				</surface>
+			</tag>
+		</loop>
+
+		
+		<tag name="wire_i0_posx_negy_0">
+			<surface name="wire_i0_posx_negy_0_surface" node="wire_i0_posx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i1_posx_negy_0">
+			<surface name="wire_i1_posx_negy_0_surface" node="wire_i1_posx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i2_posx_negy_0">
+			<surface name="wire_i2_posx_negy_0_surface" node="wire_i2_posx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i3_posx_negy_0">
+			<surface name="wire_i3_posx_negy_0_surface" node="wire_i3_posx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i4_posx_negy_0">
+			<surface name="wire_i4_posx_negy_0_surface" node="wire_i4_posx_negy">
+			</surface>
+		</tag>
+
+
+		<tag name="wire_i0_negx_negy_0">
+			<surface name="wire_i0_negx_negy_0_surface" node="wire_i0_negx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i1_negx_negy_0">
+			<surface name="wire_i1_negx_negy_0_surface" node="wire_i1_negx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i2_negx_negy_0">
+			<surface name="wire_i2_negx_negy_0_surface" node="wire_i2_negx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i3_negx_negy_0">
+			<surface name="wire_i3_negx_negy_0_surface" node="wire_i3_negx_negy">
+			</surface>
+		</tag>
+		<tag name="wire_i4_negx_negy_0">
+			<surface name="wire_i4_negx_negy_0_surface" node="wire_i4_negx_negy">
+			</surface>
+		</tag>
+	</space>
+
+	<space name="tr_assembly">
+		<tag name="tr_bounce_electrodes">
+
+			<surface name="tr_bounce_wedge_top1" node="tr_bounce_wedge_surface_top1">
+				<transformation rotation_euler="90. 90. -90."/>
+				<transformation displacement="[bounce_x_end] 0 [filter_z_start]"/>
+			</surface>
+
+			<surface name="tr_bounce_wedge_top2" node="tr_bounce_wedge_surface_top2">
+				<transformation rotation_euler="90. 90. -90."/>
+				<transformation displacement="[bounce_x_start] 0 [filter_z_start]"/>
+			</surface>
+
+			<surface name="tr_bounce_wedge_bot1" node="tr_bounce_wedge_surface_top1">
+				<transformation rotation_euler="90. 90. -90."/>
+				<transformation displacement="-[bounce_x_end] 0 [filter_z_start]"/>
+			</surface>
+
+			<surface name="tr_bounce_wedge_bot2" node="tr_bounce_wedge_surface_top2">
+				<transformation rotation_euler="90. 90. -90."/>
+				<transformation displacement="-[bounce_x_start] 0 [filter_z_start]"/>
+			</surface>
+		</tag>
+
+		<tag name="tr_ramp_electrodes">
+
+			<tag name="tr_bounce_electrode_top_0">
+				<surface name="tr_bounce_electrode_top_0_surface" node="tr_bounce_electrode_surface_top_0"/>
+			</tag>
+			<tag name="tr_bounce_electrode_bot_0">
+				<surface name="tr_bounce_electrode_bot_0_surface" node="tr_bounce_electrode_surface_bot_0"/>
+			</tag>
+
+
+			<loop variable="i" start="1" end="99" step="1">
+				<tag name="tr_bounce_electrode_top_[i]">
+					<surface name="tr_bounce_electrode_top_[i]_surface" node="tr_bounce_electrode_surface_top_[i]"/>
+				</tag>
+				<tag name="tr_bounce_electrode_bot_[i]">
+					<surface name="tr_bounce_electrode_bot_[i]_surface" node="tr_bounce_electrode_surface_bot_[i]"/>
+				</tag>
+			</loop>
+
+		
+			<loop variable="i" start="0" end="{[n_tr_electrodes]-1}" step="1">
+
+				<tag name="tr_x-1_posy_[i]">
+					<surface name="tr_x-1_posy_[i]_surface" node="filter_electrode_surface_pos_y_x-1">
+						<transformation displacement="0. 0. {-([i]+1)*[festep]}"/>
+					</surface>
+				</tag>
+				<tag name="tr_x0_posy_[i]">
+					<surface name="tr_x0_posy_[i]_surface" node="filter_electrode_surface_pos_y_x0">
+						<transformation displacement="0. 0. {-([i]+1)*[festep]}"/>
+					</surface>
+				</tag>
+				<tag name="tr_x1_posy_[i]">
+					<surface name="tr_x1_posy_[i]_surface" node="filter_electrode_surface_pos_y_x1">
+						<transformation displacement="0. 0. {-([i]+1)*[festep]}"/>
+					</surface>
+				</tag>
+
+
+				<tag name="tr_x0_negy_[i]">
+					<surface name="tr_x0_negy_[i]_surface" node="filter_electrode_surface_neg_y_x0">
+						<transformation displacement="0. 0. {-([i]+1)*[festep]}"/>
+					</surface>
+				</tag>
+			</loop>
+
+		</tag>
+	</space>
+
+	<space name="magnet_assembly">
+		<surface name="magnet_cavern" node="magnet_cavern_surface"/>
+		<surface name="magnet_outer" node="magnet_outer_surface"/>
+		<surface name="magnet_ped_top" node="magnet_ped_top_surface"/>
+		<surface name="magnet_ped_bot" node="magnet_ped_bot_surface"/>
+		<surface name="magnet_arm_top" node="magnet_arm_top_surface"/>
+		<surface name="magnet_arm_bot" node="magnet_arm_bot_surface"/>
+		<surface name="magnet_front_bot" node="magnet_front_bot_surface"/>
+		<surface name="magnet_front_top" node="magnet_front_top_surface"/>
+		<surface name="magnet_front_left" node="magnet_front_left_surface"/>
+		<surface name="magnet_front_right" node="magnet_front_right_surface"/>
+		<surface name="magnet_back_bot" node="magnet_back_bot_surface"/>
+		<surface name="magnet_back_top" node="magnet_back_top_surface"/>
+		<surface name="magnet_back_left" node="magnet_back_left_surface"/>
+		<surface name="magnet_back_right" node="magnet_back_right_surface"/>
+		<surface name="magnet_ped_front_top" node="magnet_ped_front_top_surface"/>
+		<surface name="magnet_ped_front_bot" node="magnet_ped_front_bot_surface"/>
+		<surface name="magnet_arm_back_top" node="magnet_arm_back_top_surface"/>
+		<surface name="magnet_arm_back_bot" node="magnet_arm_back_bot_surface"/>
+
+
+	</space>
+
+	<!-- assembly -->
+
+	<space name="filter_assembly">
+		<space name="fe_space" tree="fe_assembly"/>
+		<space name="bounce_space" tree="bounce_assembly"/>
+		<space name="elens_space" tree="elens_assembly"/>
+		<space name="calorimeter_space" tree="calorimeter_assembly"/>
+		<space name="wire_space" tree="wire_assembly"/>
+		<space name="tr_space" tree="tr_assembly"/>
+	</space>
+
+	<space name="world" node="box_space">
+		<space name="filter" tree="filter_assembly"/>
+		<space name="fence" tree="fence_assembly"/>
+		<space name="magnet" tree="magnet_assembly"/>
+	</space>
+
+	
+	<!-- red -->
+	<appearance name="app_electrode" color="255   0   0 127" arc="72" surfaces="world/filter/fe_space/@fe_posy_tag"/>
+	<appearance name="app_electrode" color="255   0   0 127" arc="72" surfaces="world/filter/tr_space/@fe_posy_tag"/>
+
+	<!-- green -->
+	<appearance name="app_electrode" color="  0 255   0 127" arc="72" surfaces="world/filter/fe_space/@fe_negy_tag"/>
+	<appearance name="app_electrode" color="  0 255   0 127" arc="72" surfaces="world/filter/tr_space/@fe_negy_tag"/>
+
+	<!-- yellow -->
+	<appearance name="app_electrode" color="255 255   0 127" arc="72" surfaces="world/filter/bounce_space/@bounce_tag"/>
+	<appearance name="app_electrode" color="255 255   0 127" arc="72" surfaces="world/filter/tr_space/@tr_bounce_tag"/>
+
+	<!-- purple -->
+	<appearance name="app_electrode" color="255   0 255 127" arc="72" surfaces="world/filter/tr_space/@tr_ramp_tag"/>
+
+	<!-- blue -->
+	<appearance name="app_electrode" color="  0   0 255 127" arc="72" surfaces="world/filter/wire_space/@wire_tag"/>
+
+	<!-- brown -->
+	<appearance name="app_electrode" color="  0 255 255 127" arc="72" surfaces="world/filter/elens_space/@elens_tag"/>
+	
+	<!-- gray -->
+	<appearance name="app_electrode" color="127 127 127 127" arc="72" surfaces="world/filter/calorimeter_space/@calo_tag"/>
+
+
+	<appearance name="app_electrode" color="127 127 127 127" arc="72" surfaces="world/magnet/@magnet_tag"/>
+
+
+	<mesh name="world_mesh" surfaces="world/#"/>
+
+</geometry>
