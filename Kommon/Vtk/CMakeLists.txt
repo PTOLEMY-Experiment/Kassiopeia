@@ -6,12 +6,14 @@ find_package(VTK COMPONENTS vtkCommonCore)
 if( VTK_MAJOR_VERSION GREATER 8 )
     set(KOMMON_VTK_COMPONENTS
         ChartsCore
+        CommonColor
         CommonCore
         CommonDataModel
         FiltersVerdict
         InteractionStyle
         IOGeometry
         IOXML
+        RenderingAnnotation
         RenderingContext2D
         RenderingContextOpenGL2
         RenderingCore
@@ -22,12 +24,14 @@ if( VTK_MAJOR_VERSION GREATER 8 )
 else()
     set(KOMMON_VTK_COMPONENTS
         vtkChartsCore
+        vtkCommonColor
         vtkCommonCore
         vtkCommonDataModel
         vtkFiltersVerdict
         vtkInteractionStyle
         vtkIOGeometry
         vtkIOXML
+        vtkRenderingAnnotation
         vtkRenderingContext2D
         vtkRenderingContextOpenGL2
         vtkRenderingCore
