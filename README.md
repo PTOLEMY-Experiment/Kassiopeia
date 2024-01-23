@@ -14,6 +14,8 @@
 This simulation package by [the KATRIN collaboration](https://katrin.kit.edu) allows to run highly customizable particle tracking simulations
 along with calculations of electric and magnetic fields.
 
+This fork by [the PTOLEMY collaboration](https://ptolemy.lngs.infn.it) adds modifications for use in the PTOLEMY experiment.
+
 **Full user guide:** http://katrin-experiment.github.io/Kassiopeia/index.html
 
 **Quick start:** [**Try it out online**](https://mybinder.org/v2/gh/KATRIN-Experiment/KassiopeiaBinder/HEAD)
@@ -67,6 +69,16 @@ Optional Dependencies:
 *   VTK (https://www.vtk.org) version 6.1 or higher
 *   pdflatex (for making the documentation; minimum version not known)
 *   doxygen (for making the documentation; minimum version not known)
+
+### macOS 14.2 Sonoma (Apple Silicon)
+
+* Download Xcode or the Xcode command line tools and accept the license agreement
+* Install the [MacPorts package manager](https://www.macports.org/)
+* To install build dependencies for local usage (no MPI/PETSc)
+   ```
+   > sudo port selfupdate
+   > sudo port install cmake boost gsl root6 fftw hdf5 vtk
+   ```
 
 ### Ubuntu Linux 18.04 LTS (bionic)
 
