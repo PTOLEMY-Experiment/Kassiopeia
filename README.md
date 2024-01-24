@@ -78,6 +78,9 @@ Optional Dependencies:
    ```
    > sudo port selfupdate
    > sudo port install cmake boost gsl root6 fftw hdf5 vtk
+
+   #Activate the ROOT install so CMake can find it
+   > source /opt/local/bin/thisroot.sh
    ```
 
 ### Ubuntu Linux 18.04 LTS (bionic)
