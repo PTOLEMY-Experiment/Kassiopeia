@@ -6,7 +6,7 @@
 # ./setup.sh
 # 
 # Respects the following optional environment variables, with defaults:
-# KASSIOPEIA_BUILD_TYPE=RelWithDebInfo
+# KASSIOPEIA_BUILD_TYPE=Release
 # KASSIOPEIA_INSTALL_PREFIX=install
 # KASSIOPEIA_BUILD_PREFIX=build
 # KASSIOPEIA_MAKECMD=make
@@ -36,7 +36,7 @@ if [ $# -ne 0 ] ; then
     exit -1
 fi
 
-KASSIOPEIA_BUILD_TYPE=${KASSIOPEIA_BUILD_TYPE:-"RelWithDebInfo"}
+KASSIOPEIA_BUILD_TYPE=${KASSIOPEIA_BUILD_TYPE:-"Release"}
 KASSIOPEIA_INSTALL_PREFIX=$(realpath -s ${KASSIOPEIA_INSTALL_PREFIX:-"install"})
 KASSIOPEIA_BUILD_PREFIX=$(realpath -s ${KASSIOPEIA_BUILD_PREFIX:-"build"})
 
@@ -76,11 +76,17 @@ cmake -DCMAKE_BUILD_TYPE=$KASSIOPEIA_BUILD_TYPE \
         -DKASPER_USE_VTK=ON \
         -DKASPER_USE_GSL=ON \
         -DKEMField_USE_OPENCL=OFF \
+        -DKEMField_ENABLE_APP=ON \
+        -DKEMField_ENABLE_FM_APP=ON \
+        -DKEMField_USE_FFTW=ON \
+        -DKEMField_USE_ZLIB=ON \
+        -DKGeoBag_ENABLE_APP=ON \
+        -DKassiopeia_ENABLE_APP=ON \
         -DBUILD_KASSIOPEIA=ON \
         -DBUILD_KEMFIELD=ON \
         -DBUILD_KGEOBAG=ON \
         -DBUILD_KOMMON=ON \
-        -DBUILD_UNIT_TESTS=ON \
+        -DBUILD_UNIT_TESTS=OFF \
         $KASSIOPEIA_CUSTOM_CMAKE_ARGS \
         $GIT_ARGS \
     $DIR
