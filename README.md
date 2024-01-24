@@ -79,8 +79,19 @@ Optional Dependencies:
    > sudo port selfupdate
    > sudo port install cmake boost gsl root6 fftw hdf5 vtk
 
-   #Activate the ROOT install so CMake can find it
+   #Activate the MacPorts ROOT install so CMake can find it
    > source /opt/local/bin/thisroot.sh
+
+   #The setup script configures CMake and runs make install
+   > ./setup.sh
+
+   #Lastly, source the newly installed Kassiopeia
+   > source install/bin/kasperenv.sh
+
+   #Run the programs (see user guide for details)
+   > GeometryViewer my_geometry_file.xml world/#
+   
+   > Kassiopeia my_config_file.xml
    ```
 
 ### Ubuntu Linux 18.04 LTS (bionic)
