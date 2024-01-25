@@ -1,0 +1,214 @@
+<!--
+	Author: Wonyong Chung
+	Date: March 2022
+-->
+
+<external_define name="simdir" value="/Users/wonyongc/src/ptolemy/Kassiopeia/configs"/>
+<external_define name="log_path" value="[simdir]/log/Kassiopeia"/>
+<external_define name="output_path" value="[simdir]/output/Kassiopeia"/>
+
+<external_define name="geometry_file" value="CBF54_T45_geometry"/>
+
+<!-- Simulation parameters -->
+<external_define name="run_id" value="1"/>
+<external_define name="seed" value="78797"/>
+<external_define name="events" value="1"/>
+<external_define name="n_steps" value="50000"/>
+
+<external_define name="writesteps" value="1"/>
+<external_define name="writevtk" value="1"/>
+<external_define name="showvtk" value="1"/>
+
+<external_define name="x" value="0"/>
+<!-- <external_define name="z" value="-0.325"/> -->
+<external_define name="z" value="0.01"/>
+<external_define name="y" value="-0.004027"/>
+	<!-- <external_define name="ymin" value="-0.00403"/> -->
+	<!-- <external_define name="ymax" value="-0.00402"/> -->
+	<!-- <external_define name="ycount" value="11"/> -->
+<external_define name="theta" value="96.1"/>
+	<!-- <external_define name="thetamin" value="80"/> -->
+	<!-- <external_define name="thetamax" value="100"/> -->
+	<!-- <external_define name="thetacount" value="21"/> -->
+<external_define name="phi" value="85"/>
+<!-- 	<external_define name="phimin" value="0"/>
+	<external_define name="phimax" value="90"/>
+	<external_define name="phicount" value="11"/> -->
+<external_define name="KE" value="18600"/>
+
+<external_define name="filename" value="P[phi]_CBF54_T45_-0.2_SINGLE_Y_[y]_TH_[theta]"/>
+
+<include name="[simdir]/templates/messages.xml"/>
+<include name="[simdir]/geometry/[geometry_file].xml"/>
+<include name="[simdir]/templates/structure.xml"/>
+
+
+<kemfield>
+	<!-- fields -->
+	<!-- <ksfield_magnetic_expo name="B_expo" Bx="[bx0] [bx1] [bx2]"/> -->
+<!--	<import_magnetic_field name="importedB"	/>-->
+<!--	<import_electric_field name="importedE"	/>-->
+	<constant_magnetic_field name="magnetic_constant" field="1. 0. 0."/>
+
+ 	<electrostatic_field
+		name="field_electrostatic"
+		directory="[KEMFIELD_CACHE]"
+		file="[geometry_file].kbd"
+		system="world"
+		surfaces="world/filter/@electrode_tag"
+		symmetry="none"
+		minimum_element_area="1e-6"
+		maximum_element_aspect_ratio="500">
+
+		<viewer
+			file="filter_geometry_viewer.vtp"
+			view="false"
+			save="false"
+			preprocessing="true"
+			postprocessing="true"/>
+		<krylov_bem_solver
+			solver_name="gmres"
+			preconditioner="implicit_krylov"
+			tolerance="1e-6"
+			preconditioner_tolerance="0.01"
+			max_iterations="500"
+			max_preconditioner_iterations="30"
+			iterations_between_restarts="250"
+			preconditioner_degree="1"
+			intermediate_save_interval="1"
+			use_display="false"
+			show_plot="false"
+			use_timer="false">
+			<fftm_multiplication
+				verbosity="3"
+				strategy="balanced"
+				top_level_divisions="8"
+				tree_level_divisions="5"
+				expansion_degree="7"
+				bias_degree="1"
+				neighbor_order="1"
+				maximum_tree_depth="9"
+				use_region_size_estimation="true"
+				use_caching="true"
+				region_expansion_factor="1.1"
+				insertion_ratio="1.3333333"
+				world_cube_center_x="0.0"
+				world_cube_center_y="0.0"
+				world_cube_center_z="0.0"
+				world_cube_length="1.0"/>
+			<preconditioner_electrostatic_parameters
+				verbosity="3"
+				top_level_divisions="5"
+				tree_level_divisions="5"
+				expansion_degree="0"
+				neighbor_order="1"
+				maximum_tree_depth="10"
+				use_region_size_estimation="true"
+				use_caching="true"
+				region_expansion_factor="1.1"
+				insertion_ratio="1.3333333"
+				world_cube_center_x="0.0"
+				world_cube_center_y="0.0"
+				world_cube_center_z="0.0"
+				world_cube_length="1.0"/>
+		</krylov_bem_solver>
+
+		<integrating_field_solver/>
+
+<!--  		<fast_multipole_field_solver
+			top_level_divisions="8"
+			tree_level_divisions="2"
+			expansion_degree="8"
+			neighbor_order="1"
+			maximum_tree_depth="6"
+			region_expansion_factor="2"
+			use_region_size_estimation="true"
+			use_caching="true"
+			verbosity="3"
+			use_opencl="true"/> -->
+	</electrostatic_field>
+</kemfield>
+
+
+<kassiopeia>
+
+	<!-- generators -->
+
+	<ksgen_generator_composite name="generator_uniform" pid="11">
+		<energy_composite>
+			<energy_fix value="[KE]"/>
+		</energy_composite>
+		
+		<position_rectangular_composite>
+			<x_fix value="[x]"/>
+			<y_fix value="[y]"/>
+			<!-- <y_set name="y_set" value_start="[ymin]" value_stop="[ymax]" value_count="[ycount]"/> -->
+			<z_fix value="[z]"/>
+		</position_rectangular_composite>
+		
+		<direction_spherical_composite>
+	        <theta_fix value="[theta]"/>
+	        <!-- <theta_set name="theta_set" value_start="[thetamin]" value_stop="[thetamax]" value_count="[thetacount]"/> -->
+			<phi_fix value="[phi]"/>
+	        <!-- <phi_set name="phi_set" value_start="[phimin]" value_stop="[phimax]" value_count="[phicount]"/> -->
+
+		</direction_spherical_composite>
+		
+		<time_composite>
+			<time_fix value="0"/>
+		</time_composite>
+	</ksgen_generator_composite>
+
+	<!-- simulation -->
+
+	<ks_simulation
+					run="[run_id]"
+					seed="[seed]"
+					events="[events]"
+					magnetic_field="magnetic_constant"
+					electric_field="field_electrostatic"
+					space="space_world"
+					generator="generator_uniform"
+					trajectory="trajectory_exact"
+					space_navigator="nav_space"
+					surface_navigator="nav_surface"
+					writer="write_root"
+					writer="write_vtk"
+						/>
+
+</kassiopeia>
+
+<vtk_window
+        name="vtk_window"
+        enable_display="true"
+        enable_write="true"
+        frame_title="KGeoBag Visualization"
+        frame_size_x="1024"
+        frame_size_y="768"
+        frame_color_red=".2"
+        frame_color_green=".2"
+        frame_color_blue=".2"
+        view_angle="45"
+        eye_angle="0.5"
+        multi_samples="4"
+        depth_peeling="10"
+>
+
+    <vtk_geometry_painter
+            name="geometry_painter"
+            path="[output_path]"
+            surfaces="world/filter/#"
+            file="[filename].vtp"
+    />
+
+    <vtk_track_painter
+            name="[filename]"
+            path="[output_path]"
+            file="[filename].root"
+            point_object="component_step_world"
+            point_variable="position"
+            color_object="component_step_world"
+            color_variable="kinetic_energy"
+    />
+</vtk_window>
+
