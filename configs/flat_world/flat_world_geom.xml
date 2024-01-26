@@ -1,0 +1,93 @@
+
+<geometry>
+
+  <!-- world -->
+
+  <cylinder_space name="world_space" z1="-[zlim]" z2="[zlim]" r="[radius]"/>
+
+  <!-- target -->
+
+  <tag name="target_tag">
+    <flattened_poly_loop_surface name="target_surface" z="0.0" flattened_mesh_count="32" flattened_mesh_power="3.0">
+      <poly_loop>
+	<start_point x="0.5" y="0.25"/>
+	<next_line x="0.5" y="-0.25" line_mesh_count="32" line_mesh_power="2.5"/>
+	<next_line x="-0.5" y="-0.25" line_mesh_count="32" line_mesh_power="2.5"/>
+	<next_line x="-0.5" y="0.25" line_mesh_count="32" line_mesh_power="2.5"/>
+	<last_line line_mesh_count="32" line_mesh_power="2.5"/>
+      </poly_loop>
+    </flattened_poly_loop_surface>
+  </tag>
+
+  <!-- catcher -->
+
+  <tag name="catcher_tag">
+    <disk_surface name="catcher_surface" r="0.02" z="0."/>
+    <flattened_poly_loop_surface name="catcher_ext_surface" z="0.0" flattened_mesh_count="60" flattened_mesh_power="3.0">
+      <poly_loop>
+	<start_point x="0.5" y="0.02"/>
+	<next_line x="0.5" y="-0.02" line_mesh_count="10" line_mesh_power="2.5"/>
+	<next_line x="-0.5" y="-0.02" line_mesh_count="60" line_mesh_power="2.5"/>
+	<next_line x="-0.5" y="0.02" line_mesh_count="10" line_mesh_power="2.5"/>
+	<last_line line_mesh_count="60" line_mesh_power="2.5"/>
+      </poly_loop>
+    </flattened_poly_loop_surface>
+  </tag>
+
+  <!-- fence -->
+
+  <tag name="electrode_tag">
+    <flattened_circle_surface name="fence_tb_surface" z="0." flattened_mesh_count="10" flattened_mesh_power="4.">
+      <circle x="0." y="0." radius="[radius]" circle_mesh_count="128"/>
+    </flattened_circle_surface>
+    <cylinder_surface
+    	name="fence_side_surface"
+        z1="-[zlim]"
+        z2="[zlim]"
+        r="[radius]"
+    	longitudinal_mesh_count="100"
+        longitudinal_mesh_power="3."
+        axial_mesh_count="128"
+        />
+  </tag>
+
+  <!-- assembly -->
+
+  <space name="setup_assembly">
+
+    <!-- fence -->
+
+    <tag name="fence_tag">
+    <surface name="fence_side" node="fence_side_surface"/>
+    <surface name="fence_top" node="fence_tb_surface">
+      <transformation displacement="0. 0. [zlim]"/>
+    </surface>
+    <surface name="fence_bot" node="fence_tb_surface">
+      <transformation displacement="0. 0. -[zlim]"/>
+    </surface>
+    </tag>
+
+    <surface name="target" node="target_surface">
+      <transformation rotation_euler="90. 90. 90."/>
+      <transformation displacement="0.0 0.0 0.0"/>
+    </surface>
+
+    <surface name="catcher_downstream" node="catcher_ext_surface">
+      <transformation rotation_euler="0. 0. 0."/>
+      <transformation displacement="0. 0. -1."/>
+    </surface>
+
+  </space>
+
+  <space name="world" node="world_space">
+    <space name="exb_setup" tree="setup_assembly"/>
+  </space>
+
+  <!-- appearance -->
+
+  <appearance name="app_target" color="240 100   0 127" arc="72" surfaces="world/exb_setup/@target_tag"/>
+  <appearance name="app_catcher" color="100 250   0 127" arc="72" surfaces="world/exb_setup/@catcher_tag"/>
+  <appearance name="app_fence" color=" 10  10  200 127" arc="72" surfaces="world/exb_setup/@fence_tag"/>
+
+</geometry>
+

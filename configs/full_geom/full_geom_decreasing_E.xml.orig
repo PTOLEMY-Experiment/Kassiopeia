@@ -1,0 +1,140 @@
+
+<geometry>
+
+  <define name="electrode_tb_half_length" value="0.0005"/>
+  <define name="electrode_tb_half_width" value="0.045"/>
+  <define name="electrode_tb_half_thickness" value="0.0001"/>
+  <define name="electrode_tb_half_distance" value="0.02"/>
+
+  <define name="electrode_side_half_length" value="0.50"/>
+  <define name="electrode_side_half_width" value="0.01"/>
+  <define name="electrode_side_half_thickness" value="0.0001"/>
+  <define name="electrode_side_half_distance" value="0.045"/>
+
+  <define name="electrode_disp" value="0.002"/>
+  <!-- world -->
+
+  <cylinder_space name="world_space" z1="-3." z2="3." r="2.5"/>
+
+  <!-- plates -->
+
+  <tag name="electrode_tag">   
+
+    <extruded_poly_loop_surface name="main_tb_poly_loop_surface" zmin="-{[electrode_tb_half_length]}" zmax="{[electrode_tb_half_length]}" extruded_mesh_count="512" extruded_mesh_power="6.3">
+      <poly_loop>
+        <start_point x="{[electrode_tb_half_width]}" y="-{[electrode_tb_half_thickness]}"/>
+        <next_arc x="{[electrode_tb_half_width]}" y="{[electrode_tb_half_thickness]}" radius="{[electrode_tb_half_thickness]}" right="true" short="false" arc_mesh_count="64"/>
+        <next_line x="-{[electrode_tb_half_width]}" y="{[electrode_tb_half_thickness]}" line_mesh_count="64" line_mesh_power="2.5"/>
+        <next_arc x="-{[electrode_tb_half_width]}" y="-{[electrode_tb_half_thickness]}" radius="{[electrode_tb_half_thickness]}" right="true" short="false" arc_mesh_count="64"/>
+        <last_line line_mesh_count="64" line_mesh_power="2.5"/>
+      </poly_loop>
+    </extruded_poly_loop_surface>
+    <extruded_poly_loop_surface name="cap_tb_poly_loop_surface" zmin="-{[electrode_tb_half_width]}" zmax="{[electrode_tb_half_width]}" extruded_mesh_count="64" extruded_mesh_power="6.3">
+      <poly_loop>
+        <start_point x="0.0" y="-{[electrode_tb_half_thickness]}"/>
+        <next_arc x="0.0" y="{[electrode_tb_half_thickness]}" radius="{[electrode_tb_half_thickness]}" right="true" short="false" arc_mesh_count="64"/>
+        <last_line line_mesh_count="64" line_mesh_power="2.5"/>
+      </poly_loop>
+    </extruded_poly_loop_surface>
+    <rotated_circle_surface name="corner_tb_circle_surface" rotated_mesh_count="64">
+      <circle x="0.0" y="0.0" radius="{[electrode_tb_half_thickness]}" circle_mesh_count="64"/>
+    </rotated_circle_surface>
+  </tag>
+
+  <!-- assembly -->
+
+  <space name="setup_assembly">
+
+<tag name="electrodes_all">
+    <!-- top -->
+<!--
+    <tag name="electrode_top_tag_yobo">
+    <surface name="electrode_top_yobo_tb_surface" node="main_tb_poly_loop_surface">
+      <transformation displacement="0.0 {[electrode_tb_half_distance]} {yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_top_yobo_cap_top_surface" node="cap_tb_poly_loop_surface">
+      <transformation rotation_euler="90. 90. 90."/>
+      <transformation displacement="0. {[electrode_tb_half_distance]} {[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_top_yobo_cap_bot_surface" node="cap_tb_poly_loop_surface">
+      <transformation rotation_euler="90. 90. 270."/>
+      <transformation displacement="0. {[electrode_tb_half_distance]} {-[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_top_yobo_corner_surface_1" node="corner_tb_circle_surface">
+      <transformation displacement="{[electrode_tb_half_width]} {[electrode_tb_half_distance]} {[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_top_yobo_corner_surface_2" node="corner_tb_circle_surface">
+      <transformation displacement="{[electrode_tb_half_width]} {[electrode_tb_half_distance]} {-[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_top_yobo_corner_surface_3" node="corner_tb_circle_surface">
+      <transformation displacement="-{[electrode_tb_half_width]} {[electrode_tb_half_distance]} {-[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_top_yobo_corner_surface_4" node="corner_tb_circle_surface">
+      <transformation displacement="-{[electrode_tb_half_width]} {[electrode_tb_half_distance]} {[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    </tag>
+-->
+    <!-- bottom -->
+<!--
+    <tag name="electrode_bot_tag_yobo">
+    <surface name="electrode_bot_yobo_tb_surface" node="main_tb_poly_loop_surface">
+      <transformation displacement="0.0 -{[electrode_tb_half_distance]} {yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_bot_yobo_cap_bot_surface" node="cap_tb_poly_loop_surface">
+      <transformation rotation_euler="90. 90. 90."/>
+      <transformation displacement="0. -{[electrode_tb_half_distance]} {[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_bot_yobo_cap_bot_surface" node="cap_tb_poly_loop_surface">
+      <transformation rotation_euler="90. 90. 270."/>
+      <transformation displacement="0. -{[electrode_tb_half_distance]} {-[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_bot_yobo_corner_surface_1" node="corner_tb_circle_surface">
+      <transformation displacement="{[electrode_tb_half_width]} -{[electrode_tb_half_distance]} {[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_bot_yobo_corner_surface_2" node="corner_tb_circle_surface">
+      <transformation displacement="{[electrode_tb_half_width]} -{[electrode_tb_half_distance]} {-[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_bot_yobo_corner_surface_3" node="corner_tb_circle_surface">
+      <transformation displacement="-{[electrode_tb_half_width]} -{[electrode_tb_half_distance]} {-[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    <surface name="electrode_bot_yobo_corner_surface_4" node="corner_tb_circle_surface">
+      <transformation displacement="-{[electrode_tb_half_width]} -{[electrode_tb_half_distance]} {[electrode_tb_half_length]+yobo*[electrode_disp]}"/>
+    </surface>
+    </tag>
+-->
+
+
+<include name="electrodes_top.xml"/>
+<include name="electrodes_bot.xml"/>
+
+
+</tag>
+
+  </space>
+
+  <space name="world" node="world_space">
+    <space name="exb_setup" tree="setup_assembly"/>
+  </space>
+
+  <!-- appearance -->
+
+  <appearance name="app_electrode" color="240 255   0 127" arc="72" surfaces="world/exb_setup/@electrode_top_tag"/>
+  <appearance name="app_electrode" color="255 255   0 127" arc="72" surfaces="world/exb_setup/@electrode_bot_tag"/>
+
+  <!-- mesh -->
+
+  <mesh name="mesh_electrode" surfaces="world/exb_setup/@electrode_tag"/>
+
+  <!-- bem -->
+<!--
+  <electrostatic_dirichlet name="electrode_top" surfaces="world/exb_setup/@electrode_top_tag" value="65000.0"/>
+  <electrostatic_dirichlet name="electrode_bot" surfaces="world/exb_setup/@electrode_bot_tag" value="35000.0"/>
+-->
+</geometry>
+
+<!-- begin insert -->
+
+
+
+
+

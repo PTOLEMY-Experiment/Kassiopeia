@@ -1,0 +1,79 @@
+<define name="output_path" value="[KASPERSYS]/output/Kassiopeia"/>
+<define name="log_path" value="[KASPERSYS]/log/Kassiopeia"/>
+<define name="EvectorB_path" value="[KASPERSYS]/config/Kassiopeia/Examples"/>
+
+<messages>
+  <file path="[log_path]" base="EvectorBnew2Log.txt"/>
+
+  <message key="k_file" terminal="normal" log="warning"/>
+  <message key="k_initialization" terminal="normal" log="warning"/>
+
+  <message key="kg_core" terminal="normal" log="warning"/>
+  <message key="kg_shape" terminal="normal" log="warning"/>
+  <message key="kg_mesh" terminal="normal" log="warning"/>
+  <message key="kg_axial_mesh" terminal="normal" log="warning"/>
+
+  <message key="ks_object" terminal="normal" log="normal"/>
+  <message key="ks_operator" terminal="normal" log="normal"/>
+  <message key="ks_field" terminal="normal" log="normal"/>
+  <message key="ks_geometry" terminal="normal" log="normal"/>
+  <message key="ks_generator" terminal="normal" log="normal"/>
+  <message key="ks_trajectory" terminal="normal" log="normal"/>
+  <message key="ks_interaction" terminal="normal" log="normal"/>
+  <message key="ks_navigator" terminal="normal" log="normal"/>
+  <message key="ks_terminator" terminal="normal" log="normal"/>
+  <message key="ks_writer" terminal="normal" log="normal"/>
+  <message key="ks_main" terminal="normal" log="normal"/>
+  <message key="ks_run" terminal="normal" log="normal"/>
+  <message key="ks_event" terminal="normal" log="normal"/>
+  <message key="ks_track" terminal="normal" log="normal"/>
+  <message key="ks_step" terminal="normal" log="normal"/>
+
+</messages>
+
+<include name="[EvectorB_path]/EvectorB_new2_geom.xml"/>
+
+
+<vtk_window
+    name="vtk_window"
+    enable_display="true"
+    enable_write="true"
+    frame_title="KGeoBag Visualization"
+    frame_size_x="1024"
+    frame_size_y="768"
+    frame_color_red=".2"
+    frame_color_green=".2"
+    frame_color_blue=".2"
+    view_angle="45"
+    eye_angle="0.5"
+    multi_samples="4"
+    depth_peeling="10"
+    >
+  <vtk_geometry_painter
+      name="geometry_painter"
+      file="EvectorBnew2Geometry.vtp"
+      surfaces="world/exb_setup/#"
+      />
+  <vtk_track_painter
+      name="track_painter"
+      file="EvectorBnew2.root"
+      point_object="component_step_world"
+      point_variable="position"
+      color_object="component_step_world"
+      color_variable="polar_angle_to_b"
+      />
+  <vtk_track_terminator_painter
+      name="terminator_painter"
+      file="EvectorBnew2.root"
+      point_object="component_track_world"
+      point_variable="final_position"
+      terminator_object="component_track_world"
+      terminator_variable="terminator_name"
+      add_terminator="term_electrode"
+      add_color="0 255 255"
+      add_terminator="term_fence"
+      add_color="0 0 255"
+      add_terminator="term_max_steps"
+      add_color="255 0 0"
+      />
+</vtk_window>

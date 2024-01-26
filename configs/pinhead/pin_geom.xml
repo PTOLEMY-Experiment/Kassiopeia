@@ -1,0 +1,145 @@
+
+<geometry>
+
+	<cylinder_space name="cylinder_space" z1="-0.05" z2="0.05" r="0.1"/>
+
+	<tag name="shape_tag">
+
+		<!-- CPW ground plate -->
+		<flattened_poly_loop_surface name="ground_shape" z="-0.0025" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="-0.0305"/>
+				<next_line x="0." y="0.0305" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.021" y="0.0305" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.021" y="-0.0305" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- mid plate -->
+		<flattened_poly_loop_surface name="mid_field_shape" z="0.0025" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="-0.015"/>
+				<next_line x="0." y="0.015" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.01" y="0.015" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.01" y="-0.015" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- bottle plates -->
+		<flattened_poly_loop_surface name="bottle_field_shape" z="0.0025" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="{-0.015/2}"/>
+				<next_line x="0." y="{0.015/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.021" y="{0.015/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.021" y="{-0.015/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- Penning trap plates -->
+		<flattened_poly_loop_surface name="penning_field_shape" z="0.0025" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="-0.015"/>
+				<next_line x="0." y="0.015" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{0.01/2}" y="0.015" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{0.01/2}" y="-0.015" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- fence -->
+		<extruded_circle_surface name="fence_shape" zmin="-0.05" zmax="0.05" extruded_mesh_count="100" extruded_mesh_power="1">
+			<circle x="0." y="0." radius="0.1" circle_mesh_count="128"/>
+		</extruded_circle_surface>
+
+		<!-- source -->
+		<flattened_poly_loop_surface name="source_shape" z="0." flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="-0.0005"/>
+				<next_line x="0." y="0.0005" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.001" y="0.0005" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.001" y="-0.0005" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+	</tag>
+
+
+	<!-- assembly -->
+
+	<space name="fence_assembly">
+		<tag name="fence_tag">
+			<surface name="fence_surface" node="fence_shape"/>
+		</tag>
+	</space>
+
+	<space name="source_assembly">
+		<tag name="source_tag">
+			<surface name="source_surface" node="source_shape">
+				<transformation displacement="{-0.001/2-0.021/2} 0. 0."/>
+			</surface>
+		</tag>
+	</space>
+
+	<space name="electrode_assembly">
+
+		<tag name="ground_plate">
+			<surface name="ground_plate_surface" node="ground_shape">
+				<transformation displacement="-0.021 0. 0."/>
+			</surface>
+		</tag>
+
+		<tag name="mid_plate">
+			<surface name="mid_plate_surface" node="mid_field_shape">
+				<transformation displacement="{-0.01-0.005-0.0005} 0. 0."/>
+			</surface>
+		</tag>
+
+		<tag name="front_penning_plate">
+			<surface name="front_penning_plate_surface" node="penning_field_shape">
+				<transformation displacement="-0.005 0. 0."/>
+			</surface>
+		</tag>
+
+		<tag name="back_penning_plate">
+			<surface name="back_penning_plate_surface" node="penning_field_shape">
+				<transformation displacement="{-0.005-0.005-0.0005-0.01-0.0005} 0. 0."/>
+			</surface>
+		</tag>
+
+		<tag name="left_bottle_plate">
+			<surface name="top_bottle_plate_surface" node="bottle_field_shape">
+				<transformation displacement="-0.021 {-0.015/2-0.015-0.0005} 0."/>
+			</surface>
+		</tag>
+
+		<tag name="right_bottle_plate">
+			<surface name="bottom_bottle_plate_surface" node="bottle_field_shape">
+				<transformation displacement="-0.021 {0.015/2+0.015+0.0005} 0."/>
+			</surface>
+		</tag>
+
+	</space>
+
+	<space name="world" node="cylinder_space">
+		<space name="fence_space" tree="fence_assembly"/>
+		<space name="source_space" tree="source_assembly">
+			<transformation rotation_euler="0. -90. 0."/>
+		</space>
+		<space name="electrode_space" tree="electrode_assembly">
+			<transformation rotation_euler="0. -90. 0."/>
+		</space>
+	</space>
+
+	<appearance name="app_electrode" color="  0   0 255 127" arc="72" surfaces="world/electrode_space/@ground_plate"/>
+	<appearance name="app_electrode" color="255   0   0 127" arc="72" surfaces="world/electrode_space/@mid_plate"/>
+	<appearance name="app_electrode" color="  0 128   0 127" arc="72" surfaces="world/electrode_space/@left_bottle_plate"/>
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@right_bottle_plate"/>
+	<appearance name="app_electrode" color=" 50 128 150 127" arc="72" surfaces="world/electrode_space/@front_penning_plate"/>
+	<appearance name="app_electrode" color="  0 128 128 127" arc="72" surfaces="world/electrode_space/@back_penning_plate"/>
+
+</geometry>
+

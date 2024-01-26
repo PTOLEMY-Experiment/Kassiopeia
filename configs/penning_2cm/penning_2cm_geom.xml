@@ -1,0 +1,247 @@
+
+<geometry>
+
+	<cylinder_space name="cylinder_space" z1="-0.1" z2="0.1" r="0.15"/>
+
+	<tag name="shape_tag">
+
+<!-- top -->
+		<!-- side ground plates -->
+		<flattened_poly_loop_surface name="tside_ground_plate1_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0+0.2+6)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{-(5.0+0.2)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0+0.2)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0+0.2+6)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="tside_ground_plate2_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{(5.0+0.2)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{(5.0+0.2+6)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0+0.2+6)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0+0.2)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- bumper plates -->
+		<flattened_poly_loop_surface name="tbumper_plate1_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="tbumper_plate2_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{-(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- intermediate plates -->
+		<flattened_poly_loop_surface name="tintermediate_plate1_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{(1.5+0.2+1.5)/100}"/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2+1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="tintermediate_plate2_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{-(1.5+0.2+1.5)/100}"/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2+1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{-(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- center plate -->
+		<flattened_poly_loop_surface name="tcenter_plate_shape" z="-0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{(1.5)/100}"/>
+				<next_line x="{(5.0)/100}" y="{(1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{-(1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{-(1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+<!-- bottom -->
+		<!-- side ground plates -->
+		<flattened_poly_loop_surface name="bside_ground_plate1_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0+0.2+6)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{-(5.0+0.2)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0+0.2)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0+0.2+6)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="bside_ground_plate2_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{(5.0+0.2)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{(5.0+0.2+6)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0+0.2+6)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0+0.2)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- bumper plates -->
+		<flattened_poly_loop_surface name="bbumper_plate1_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="bbumper_plate2_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}"/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2+1.5+0.2+2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{-(1.5+0.2+1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- intermediate plates -->
+		<flattened_poly_loop_surface name="bintermediate_plate1_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{(1.5+0.2+1.5)/100}"/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2+1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="bintermediate_plate2_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{-(1.5+0.2+1.5)/100}"/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2+1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{-(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{-(1.5+0.2)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- center plate -->
+		<flattened_poly_loop_surface name="bcenter_plate_shape" z="0.01" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="{-(5.0)/100}" y="{(1.5)/100}"/>
+				<next_line x="{(5.0)/100}" y="{(1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{(5.0)/100}" y="{-(1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="{-(5.0)/100}" y="{-(1.5)/100}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/> 
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- fence -->
+		<extruded_circle_surface name="fence_shape" zmin="-0.1" zmax="0.1" extruded_mesh_count="100" extruded_mesh_power="1">
+			<circle x="0." y="0." radius="0.15" circle_mesh_count="128"/>
+		</extruded_circle_surface>
+
+	</tag>
+
+
+	<!-- assembly -->
+
+	<space name="fence_assembly">
+		<tag name="fence_tag">
+			<surface name="fence_surface" node="fence_shape"/>
+		</tag>
+	</space>
+
+	<space name="electrode_assembly">
+
+<!-- top -->
+		<tag name="tside_ground_plate1">
+			<surface name="tside_ground_plate1_surface" node="tside_ground_plate1_shape"/>
+		</tag>
+		<tag name="tside_ground_plate2">
+			<surface name="tside_ground_plate2_surface" node="tside_ground_plate2_shape"/>
+		</tag>
+		<tag name="tbumper_plate1">
+			<surface name="tbumper_plate1_surface" node="tbumper_plate1_shape"/>
+		</tag>
+		<tag name="tbumper_plate2">
+			<surface name="tbumper_plate2_surface" node="tbumper_plate2_shape"/>
+		</tag>
+		<tag name="tintermediate_plate1">
+			<surface name="tintermediate_plate1_surface" node="tintermediate_plate1_shape"/>
+		</tag>
+		<tag name="tintermediate_plate2">
+			<surface name="tintermediate_plate2_surface" node="tintermediate_plate2_shape"/>
+		</tag>
+		<tag name="tcenter_plate">
+			<surface name="tcenter_plate_surface" node="tcenter_plate_shape"/>
+		</tag>
+<!-- bottom -->
+		<tag name="bside_ground_plate1">
+			<surface name="bside_ground_plate1_surface" node="bside_ground_plate1_shape"/>
+		</tag>
+		<tag name="bside_ground_plate2">
+			<surface name="bside_ground_plate2_surface" node="bside_ground_plate2_shape"/>
+		</tag>
+		<tag name="bbumper_plate1">
+			<surface name="bbumper_plate1_surface" node="bbumper_plate1_shape"/>
+		</tag>
+		<tag name="bbumper_plate2">
+			<surface name="bbumper_plate2_surface" node="bbumper_plate2_shape"/>
+		</tag>
+		<tag name="bintermediate_plate1">
+			<surface name="bintermediate_plate1_surface" node="bintermediate_plate1_shape"/>
+		</tag>
+		<tag name="bintermediate_plate2">
+			<surface name="bintermediate_plate2_surface" node="bintermediate_plate2_shape"/>
+		</tag>
+		<tag name="bcenter_plate">
+			<surface name="bcenter_plate_surface" node="bcenter_plate_shape"/>
+		</tag>
+
+	</space>
+
+	<space name="world" node="cylinder_space">
+		<space name="fence_space" tree="fence_assembly"/>
+		<space name="electrode_space" tree="electrode_assembly">
+			<transformation rotation_euler="90. 90. 0."/>
+		</space>
+	</space>
+
+	<appearance name="app_electrode" color="123 123 255 127" arc="72" surfaces="world/electrode_space/@tcenter_plate"/>
+<!-- 	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@tbumper_plate1"/>
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@tbumper_plate2"/> -->
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@tintermediate_plate1"/>
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@tintermediate_plate2"/>
+	<appearance name="app_electrode" color="  0   0   0 127" arc="72" surfaces="world/electrode_space/@tside_ground_plate1"/>
+	<appearance name="app_electrode" color="  0   0   0 127" arc="72" surfaces="world/electrode_space/@tside_ground_plate2"/>
+
+	<appearance name="app_electrode" color="  0   0 255 127" arc="72" surfaces="world/electrode_space/@bcenter_plate"/>
+<!-- 	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@bbumper_plate1"/>
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@bbumper_plate2"/> -->
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@bintermediate_plate1"/>
+	<appearance name="app_electrode" color="  0   0 128 127" arc="72" surfaces="world/electrode_space/@bintermediate_plate2"/>
+	<appearance name="app_electrode" color="  0   0   0 127" arc="72" surfaces="world/electrode_space/@bside_ground_plate1"/>
+	<appearance name="app_electrode" color="  0   0   0 127" arc="72" surfaces="world/electrode_space/@bside_ground_plate2"/>
+
+</geometry>
+

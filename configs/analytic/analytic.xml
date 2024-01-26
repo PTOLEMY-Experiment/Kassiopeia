@@ -1,0 +1,130 @@
+<!--
+	Author: Wonyong Chung
+	Date: March 2023
+-->
+<external_define name="simdir" value="/Users/wonyongc/src/ptolemy/Kassiopeia/configs"/>
+<include name="[simdir]/templates/external_defines.xml"/>
+
+<external_define name="output_file" value="test"/>
+
+<external_define name="writesteps" value="1"/>
+<external_define name="writevtk" value="1"/>
+<external_define name="showvtk" value="1"/>
+
+<!-- Initial state of electron-->
+<external_define name="phi" value="90"/>
+
+<external_define name="theta" value="90"/>
+<external_define name="thetamin" value="70"/>
+<external_define name="thetamax" value="140"/>
+<external_define name="thetacount" value="8"/>
+
+<external_define name="KE" value="18600"/>
+<external_define name="KEmin" value="18595"/>
+<external_define name="KEmax" value="18610"/>
+<external_define name="KEcount" value="10"/>
+
+<external_define name="x" value="0"/>
+<external_define name="z" value="0"/>
+
+<external_define name="yscanmin" value="0.078439816"/>
+<external_define name="yscanmax" value="0.078539816"/>
+<external_define name="ycount" value="1"/>
+
+<!--<external_define name="y"    value="0.0261799388"/>-->
+<external_define name="y"        value="0.078449816"/>
+<external_define name="ywindow"  value="0.05"/>
+
+<!-- Geomtry parameters -->
+<external_define name="xlim" value="0.01"/>
+<external_define name="ymin" value="{[y]-[ywindow]}"/>
+<external_define name="ymax" value="{[y]+[ywindow]}"/>
+<external_define name="zmin" value="-0.01"/>
+<external_define name="zmax" value="1.0"/>
+
+<external_define name="zcatchstart" value="0.9"/>
+<external_define name="zcatchend"   value="[zmax]"/>
+
+<!--<external_define name="filename" value="[output_file]_[B0]T_z[zcatchstart]_y[ywindow]_th[thetacount]_KE[KEmin]_[KEmax]_[KEcount][tag]"/>-->
+<external_define name="filename" value="[output_file]_[B0]T_y[y]"/>
+
+<!--<external_define name="filename" value="[output_file]_[B0]T_yscan_[ymin]_[ymax]_large"/>-->
+
+<include name="[simdir]/templates/messages.xml"/>
+<include name="[simdir]/geometry/analytic_geom.xml"/>
+<include name="[simdir]/templates/analytic_structure.xml"/>
+
+<kemfield>
+  <expo_magnetic_field name="B_expo" B0="[B0]" lambda="[lambda]"/>
+  <expo_electric_field name="E_expo"  TKE="[TKE]" B0="1" lambda="[lambda]"/>
+</kemfield>
+
+<kassiopeia>
+  <!-- generators -->
+  <ksgen_generator_composite name="generator_uniform" pid="11">
+
+    <energy_composite>
+      <energy_fix value="[KE]"/>
+<!--      <energy_set name="ke_set" value_start="[KEmin]" value_stop="[KEmax]" value_count="[KEcount]"/>-->
+    </energy_composite>
+
+    <position_rectangular_composite>
+      <x_fix value="[x]"/>
+      <y_fix value="[y]"/>
+<!--      <y_set name="y_set" value_start="[yscanmin]" value_stop="[yscanmax]" value_count="[ycount]"/>-->
+      <z_fix value="[z]"/>
+    </position_rectangular_composite>
+
+    <direction_spherical_composite>
+      <theta_fix value="[theta]"/>
+<!--      <theta_set name="theta_set" value_start="[thetamin]" value_stop="[thetamax]" value_count="[thetacount]"/>-->
+      <phi_fix value="[phi]"/>
+    </direction_spherical_composite>
+
+    <time_composite>
+      <time_fix value="0"/>
+    </time_composite>
+
+  </ksgen_generator_composite>
+
+  <!-- simulation -->
+  <if condition="{[writevtk] eq 1}">
+    <ks_simulation
+        run="[run_id]"
+        seed="[seed]"
+        events="[events]"
+        magnetic_field="B_expo"
+        electric_field="E_expo"
+        space="space_world"
+        generator="generator_uniform"
+        trajectory="trajectory_exact"
+        space_navigator="nav_space"
+        surface_navigator="nav_surface"
+        writer="write_root"
+        writer="write_vtk"
+    />
+  </if>
+
+  <if condition="{[writevtk] eq 0}">
+    <ks_simulation
+            run="[run_id]"
+            seed="[seed]"
+            events="[events]"
+            magnetic_field="B_expo"
+            electric_field="E_expo"
+            space="space_world"
+            generator="generator_uniform"
+            trajectory="trajectory_exact"
+            space_navigator="nav_space"
+            surface_navigator="nav_surface"
+            writer="write_root"
+    />
+  </if>
+
+  </kassiopeia>
+
+<if condition="{([showvtk] eq 1) && ([writesteps] eq 1)}">
+  <include name="[simdir]/templates/vtk_window.xml"/>
+</if>
+
+

@@ -1,0 +1,135 @@
+<!--
+	Author: Wonyong Chung
+	Date: June 2019
+-->
+
+<geometry>
+
+	<!--
+	<define name="electrode_length" value="0.1"/>
+	<define name="electrode_width" value="0.002"/>
+	<define name="electrode_gap" value="0.0025"/>
+	<define name="half_distance_between_tb" value="0.005"/>
+	<define name="electrodes_start_x_position" value="0."/>
+
+	<define name="cylinder_half_height" value="0.2"/>
+	<define name="cylinder_radius" value="0.75"/>
+	-->
+
+	<!-- world -->
+
+	<cylinder_space name="cylinder_space" z1="-0.2" z2="1.2" r="0.75"/>
+
+	<!-- shapes -->
+
+	<tag name="shape_tag">   
+
+		<flattened_poly_loop_surface name="bumper_shape" z="0.0" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="-0.1" y="-0.004"/>
+				<next_line x="-0.1" y="0.004" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="1.1" y="0.004" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="1.1" y="-0.004" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="electrode_shape_bot" z="0.005" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="{-0.1/2}"/>
+				<next_line x="0." y="{0.1/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.002" y="{0.1/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.002" y="{-0.1/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<flattened_poly_loop_surface name="electrode_shape_top" z="-0.005" flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="0." y="{-0.1/2}"/>
+				<next_line x="0." y="{0.1/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.002" y="{0.1/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.002" y="{-0.1/2}" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+		<!-- fence -->
+		<extruded_circle_surface name="fence_shape" zmin="-0.2" zmax="1.2" extruded_mesh_count="100" extruded_mesh_power="1">
+			<circle x="0." y="0." radius="0.75" circle_mesh_count="128"/>
+		</extruded_circle_surface>
+
+		<!-- source -->
+		<flattened_poly_loop_surface name="source_shape" z="0." flattened_mesh_count="100" flattened_mesh_power="1.">
+			<poly_loop>
+				<start_point x="-0.001" y="0.001"/>
+				<next_line x="0.001" y="0.001" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="0.001" y="-0.001" line_mesh_count="100" line_mesh_power="1."/>
+				<next_line x="-0.001" y="-0.001" line_mesh_count="100" line_mesh_power="1."/>
+				<last_line line_mesh_count="100" line_mesh_power="1."/>
+			</poly_loop>
+		</flattened_poly_loop_surface>
+
+	</tag>
+
+	<!-- assembly -->
+
+	<space name="fence_assembly">
+		<tag name="fence_tag">
+			<surface name="fence_surface" node="fence_shape"/>
+		</tag>
+	</space>
+
+	<space name="source_assembly">
+		<tag name="source_tag">
+			<surface name="source_surface" node="source_shape"/>
+		</tag>
+	</space>
+
+	<space name="bumper_assembly">
+		<tag name="rear_bumper">
+			<surface name="rear_bumper_surface" node="bumper_shape">
+				<transformation displacement="0. 0. {-0.1/2}"/>
+			</surface>
+		</tag>
+
+		<tag name="front_bumper">
+			<surface name="front_bumper_surface" node="bumper_shape">
+				<transformation displacement="0. 0. {0.1/2}"/>
+			</surface>
+		</tag>
+	</space>
+
+	<space name="electrode_assembly">
+		<loop variable="i" start="0" end="399" step="1">
+			<tag name="top_electrode_[i]">
+				<surface name="top_electrode_[i]_surface" node="electrode_shape_top">
+					<transformation displacement="{[i]*0.0025} 0. 0."/>
+				</surface>
+			</tag>
+
+			<tag name="bot_electrode_[i]">
+				<surface name="bot_electrode_[i]_surface" node="electrode_shape_bot">
+					<transformation displacement="{[i]*0.0025} 0. 0."/>
+				</surface>
+			</tag>
+		</loop>
+	</space>
+
+	<space name="world" node="cylinder_space">
+		<space name="fence_space" tree="fence_assembly"/>
+		<space name="source_space" tree="source_assembly">
+			<transformation rotation_euler="90. 90. 90."/>
+		</space>
+		<space name="bumper_space" tree="bumper_assembly">
+			<transformation rotation_euler="90. 90. 90."/>
+		</space>
+		<space name="electrode_space" tree="electrode_assembly">
+			<transformation rotation_euler="0. 90. 90."/>
+		</space>
+	</space>
+	
+	<appearance name="app_electrode" color="  0   0 255 127" arc="72" surfaces="world/electrode_space/@top_electrode_0"/>
+	<appearance name="app_electrode" color="255   0   0 127" arc="72" surfaces="world/electrode_space/@top_electrode_1"/>
+
+</geometry>

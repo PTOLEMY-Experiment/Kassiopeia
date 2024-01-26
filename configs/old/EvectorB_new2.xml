@@ -1,0 +1,358 @@
+<define name="output_path" value="[KASPERSYS]/output/Kassiopeia"/>
+<define name="log_path" value="[KASPERSYS]/log/Kassiopeia"/>
+<define name="EvectorB_path" value="[KASPERSYS]/config/Kassiopeia/Examples"/>
+
+<messages>
+  <file path="[log_path]" base="EvectorBnew2Log.txt"/>
+
+  <message key="k_file" terminal="normal" log="warning"/>
+  <message key="k_initialization" terminal="normal" log="warning"/>
+
+  <message key="kg_core" terminal="normal" log="warning"/>
+  <message key="kg_shape" terminal="normal" log="warning"/>
+  <message key="kg_mesh" terminal="normal" log="warning"/>
+  <message key="kg_axial_mesh" terminal="normal" log="warning"/>
+
+  <message key="ks_object" terminal="normal" log="normal"/>
+  <message key="ks_operator" terminal="normal" log="normal"/>
+  <message key="ks_field" terminal="normal" log="normal"/>
+  <message key="ks_geometry" terminal="normal" log="normal"/>
+  <message key="ks_generator" terminal="normal" log="normal"/>
+  <message key="ks_trajectory" terminal="normal" log="normal"/>
+  <message key="ks_interaction" terminal="normal" log="normal"/>
+  <message key="ks_navigator" terminal="normal" log="normal"/>
+  <message key="ks_terminator" terminal="normal" log="normal"/>
+  <message key="ks_writer" terminal="normal" log="normal"/>
+  <message key="ks_main" terminal="normal" log="normal"/>
+  <message key="ks_run" terminal="normal" log="normal"/>
+  <message key="ks_event" terminal="normal" log="normal"/>
+  <message key="ks_track" terminal="normal" log="normal"/>
+  <message key="ks_step" terminal="normal" log="normal"/>
+
+</messages>
+
+<include name="[EvectorB_path]/EvectorB_new2_geom.xml"/>
+
+<geometry>  
+
+  <!-- mesh -->
+
+  <mesh name="mesh_electrode" surfaces="world/exb_setup/@electrode_tag"/>
+
+  <!-- bem -->
+
+  <electrostatic_dirichlet name="electrode_top" surfaces="world/exb_setup/@electrode1_tag" value="65000.0"/>
+  <electrostatic_dirichlet name="electrode_bot" surfaces="world/exb_setup/@electrode2_tag" value="35000.0"/>
+  <electrostatic_dirichlet name="electrode_left" surfaces="world/exb_setup/@electrode3_tag" value="10000.0"/>
+  <electrostatic_dirichlet name="electrode_right" surfaces="world/exb_setup/@electrode4_tag" value="10000.0"/>
+  <electrostatic_dirichlet name="electrode_fence" surfaces="world/exb_setup/@fence_tag" value="0.0"/>
+
+</geometry>
+
+<kassiopeia>
+
+  <!-- magnetic fields -->
+
+  <ksfield_magnetic_constant name="field_edotb_x" field="-1.0 0. 0."/>
+
+  <!-- electric fields -->
+
+  <ksfield_electrostatic
+      name="field_electrostatic"
+      directory="[KEMFIELD_CACHE]"
+      file="EvectorBnew2Electrodes.kbd"
+      system="world/exb_setup"
+      surfaces="world/exb_setup/@electrode_tag"
+      symmetry="none"
+      minimum_element_area="1e-15"
+      maximum_element_aspect_ratio="50"
+      >
+    <viewer
+        file="EvectorBnew2.vtp"
+        view="false"
+        save="true"
+        preprocessing="true"
+        postprocessing="true"
+        />
+    <krylov_bem_solver
+        solver_name="gmres"
+        preconditioner="implicit_krylov"
+        tolerance="2e-6"
+        preconditioner_tolerance="0.01"
+        max_iterations="500"
+        max_preconditioner_iterations="30"
+        iterations_between_restarts="250"
+        preconditioner_degree="1"
+        intermediate_save_interval="1"
+        use_display="true"
+        show_plot="false"
+        use_timer="true"
+        >
+      <fftm_multiplication
+          verbosity="3"
+          strategy="balanced"
+          top_level_divisions="10"
+          tree_level_divisions="4"
+          expansion_degree="7"
+          bias_degree="1"
+          neighbor_order="1"
+          maximum_tree_depth="9"
+          use_region_size_estimation="true"
+          use_caching="true"
+          region_expansion_factor="1.1"
+          insertion_ratio="1.3333333"
+          world_cube_center_x="0.0"
+          world_cube_center_y="0.0"
+          world_cube_center_z="0.0"
+          world_cube_length="0.0"
+          />
+      <preconditioner_electrostatic_parameters
+          verbosity="3"
+          top_level_divisions="4"
+          tree_level_divisions="3"
+          expansion_degree="0"
+          neighbor_order="1"
+          maximum_tree_depth="5"
+          use_region_size_estimation="true"
+          use_caching="true"
+          region_expansion_factor="1.1"
+          insertion_ratio="1.3333333"
+          world_cube_center_x="0.0"
+          world_cube_center_y="0.0"
+          world_cube_center_z="0.0"
+          world_cube_length="0.0"
+          />
+    </krylov_bem_solver>
+    <fast_multipole_field_solver
+        top_level_divisions="10"
+        tree_level_divisions="4"
+        expansion_degree="8"
+        neighbor_order="1"
+        maximum_tree_depth="6"
+        region_expansion_factor="2"
+        use_region_size_estimation="true"
+        use_caching="true"
+        verbosity="3"
+        use_opencl="true"
+        />
+  </ksfield_electrostatic>
+
+  <ksfield_electric_constant
+      name="field_constant"
+      field="0. 0. 0."
+      />
+
+  <!-- generators -->
+
+  <ksgen_generator_composite name="generator_uniform" pid="11">
+    <energy_composite>
+      <energy_uniform value_min="5000.0" value_max="20000"/>
+    </energy_composite>
+    <position_rectangular_composite surface="world/exb_setup/target">
+      <x_uniform value_min="-0.005" value_max="0.005"/>
+      <y_uniform value_min="-0.010" value_max="0.002"/>
+      <z_fix value="0."/>
+    </position_rectangular_composite>
+    <direction_spherical_composite surface="world/exb_setup/target">
+      <theta_uniform value_min="0." value_max="90."/>
+      <phi_uniform value_min="0." value_max="360"/>
+    </direction_spherical_composite>
+    <time_composite>
+      <time_fix value="0."/>
+    </time_composite>
+  </ksgen_generator_composite>
+
+  <!-- trajectories-->
+
+  <kstraj_trajectory_exact name="trajectory_exact">
+    <interpolator_fast name="interpolator_fast"/>
+    <integrator_rk8 name="integrator_rk8"/>
+    <term_propagation name="term_propagation"/>
+    <control_cyclotron name="control_cyclotron_1_64" fraction="{1. / 64.}"/>
+    <control_time name="control_time" time="5.e-9"/>
+  </kstraj_trajectory_exact>
+
+  <!--
+
+  <kstraj_trajectory_electric name="trajectory_exact">
+    <integrator_rk8 name="integrator_rk8"/>
+    <term_propagation name="term_propagation" direction="forward"/>
+    <control_time name="control_time" time="1.e-2"/>
+  </kstraj_trajectory_electric>
+
+  -->
+
+  <!-- space navigators -->
+
+  <ksnav_space name="nav_space" enter_split="false" exit_split="false"/>
+
+  <!-- surface navigators -->
+
+  <ksnav_surface name="nav_surface" transmission_split="false" reflection_split="false"/>
+
+  <!-- terminators -->
+
+  <ksterm_death name="term_electrode"/>
+  <ksterm_death name="term_fence"/>
+  <ksterm_death name="term_catcher"/>
+  <ksterm_death name="term_world"/>
+  <ksterm_max_steps name="term_max_steps" steps="1200000"/>
+
+  <!-- writers -->
+
+  <kswrite_root name="write_root" base="EvectorBnew2.root"/>
+  <kswrite_vtk name="write_vtk" base="EvectorBnew2"/>
+
+  <!-- output -->
+
+  <ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
+  <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
+  <ks_component_member name="component_track_position" field="position" parent="component_track_final_particle"/>
+  <ks_component_member name="component_track_length" field="length" parent="component_track_final_particle"/>
+
+  <ks_component_group name="component_track_world">
+    <component_member name="creator_name" field="creator_name" parent="track"/>
+    <component_member name="terminator_name" field="terminator_name" parent="track"/>
+    <component_member name="total_steps" field="total_steps" parent="track"/>
+    <component_member name="initial_time" field="time" parent="component_track_initial_particle"/>
+    <component_member name="initial_position" field="position" parent="component_track_initial_particle"/>
+    <component_member name="initial_momentum" field="momentum" parent="component_track_initial_particle"/>
+    <component_member name="initial_magnetic_field" field="magnetic_field" parent="component_track_initial_particle"/>
+    <component_member name="initial_electric_field" field="electric_field" parent="component_track_initial_particle"/>
+    <component_member name="initial_electric_potential" field="electric_potential" parent="component_track_initial_particle"/>
+    <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
+    <component_member name="initial_orbital_magnetic_moment" field="orbital_magnetic_moment" parent="component_track_initial_particle"/>
+    <component_member name="initial_polar_angle_to_z" field="polar_angle_to_z" parent="component_track_initial_particle"/>
+    <component_member name="initial_polar_angle_to_b" field="polar_angle_to_b" parent="component_track_initial_particle"/>
+    <component_member name="final_time" field="time" parent="component_track_final_particle"/>
+    <component_member name="final_position" field="position" parent="component_track_final_particle"/>
+    <component_member name="final_momentum" field="momentum" parent="component_track_final_particle"/>
+    <component_member name="final_magnetic_field" field="magnetic_field" parent="component_track_final_particle"/>
+    <component_member name="final_electric_field" field="electric_field" parent="component_track_final_particle"/>
+    <component_member name="final_electric_potential" field="electric_potential" parent="component_track_final_particle"/>
+    <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
+    <component_member name="final_orbital_magnetic_moment" field="orbital_magnetic_moment" parent="component_track_final_particle"/>
+    <component_member name="final_polar_angle_to_z" field="polar_angle_to_z" parent="component_track_final_particle"/>
+    <component_member name="final_polar_angle_to_b" field="polar_angle_to_b" parent="component_track_final_particle"/>
+  </ks_component_group>
+
+  <ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+  <ks_component_member name="component_step_position" field="position" parent="component_step_final_particle"/>
+  <ks_component_member name="component_step_length" field="length" parent="component_step_final_particle"/>
+
+  <ks_component_group name="component_step_world">
+    <component_member name="step_id" field="step_id" parent="step"/>
+    <component_member name="continuous_time" field="continuous_time" parent="step"/>
+    <component_member name="continuous_length" field="continuous_length" parent="step"/>
+    <component_member name="time" field="time" parent="component_step_final_particle"/>
+    <component_member name="position" field="position" parent="component_step_final_particle"/>
+    <component_member name="momentum" field="momentum" parent="component_step_final_particle"/>
+    <component_member name="magnetic_field" field="magnetic_field" parent="component_step_final_particle"/>
+    <component_member name="electric_field" field="electric_field" parent="component_step_final_particle"/>
+    <component_member name="electric_potential" field="electric_potential" parent="component_step_final_particle"/>
+    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
+    <component_member name="orbital_magnetic_moment" field="orbital_magnetic_moment" parent="component_step_final_particle"/>
+    <component_member name="polar_angle_to_z" field="polar_angle_to_z" parent="component_step_final_particle"/>
+    <component_member name="polar_angle_to_b" field="polar_angle_to_b" parent="component_step_final_particle"/>
+  </ks_component_group>
+
+  <!-- structure -->
+
+  <ksgeo_space name="space_world" spaces="world">
+    <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
+    <command parent="root_terminator" field="remove_terminator" child="term_world"/>
+    <command parent="write_root" field="add_track_output" child="component_track_world"/>
+    <command parent="write_root" field="add_step_output" child="component_step_world"/> 
+    <command parent="write_vtk" field="set_track_point" child="component_track_position"/>
+    <command parent="write_vtk" field="set_track_data" child="component_track_length"/>
+    <command parent="write_vtk" field="set_step_point" child="component_step_position"/>
+    <command parent="write_vtk" field="set_step_data" child="component_step_length"/>
+    <geo_surface name="surface_e1" surfaces="world/exb_setup/@electrode1_tag">
+      <command parent="root_terminator" field="add_terminator" child="term_electrode"/>
+    </geo_surface>
+    <geo_surface name="surface_e2" surfaces="world/exb_setup/@electrode2_tag">
+      <command parent="root_terminator" field="add_terminator" child="term_electrode"/>
+    </geo_surface>
+    <geo_surface name="surface_e3" surfaces="world/exb_setup/@electrode3_tag">
+      <command parent="root_terminator" field="add_terminator" child="term_electrode"/>
+    </geo_surface>
+    <geo_surface name="surface_e4" surfaces="world/exb_setup/@electrode4_tag">
+      <command parent="root_terminator" field="add_terminator" child="term_electrode"/>
+    </geo_surface>
+    <geo_surface name="surface_catcher" surfaces="world/exb_setup/@catcher_tag">
+      <command parent="root_terminator" field="add_terminator" child="term_catcher"/>
+    </geo_surface>
+    <geo_surface name="surface_fence" surfaces="world/exb_setup/fence_side">
+      <command parent="root_terminator" field="add_terminator" child="term_fence"/>
+    </geo_surface>
+    <geo_surface name="surface_fence_top" surfaces="world/exb_setup/fence_top">
+      <command parent="root_terminator" field="add_terminator" child="term_fence"/>
+    </geo_surface>
+    <geo_surface name="surface_fence_bot" surfaces="world/exb_setup/fence_bot">
+      <command parent="root_terminator" field="add_terminator" child="term_fence"/>
+    </geo_surface>
+  </ksgeo_space>
+
+  <!-- simulation -->
+
+  <ks_simulation
+      run="1"
+      seed="51315"
+      events="1"
+      magnetic_field="field_edotb_x"
+      electric_field="field_electrostatic"
+      space="space_world"
+      generator="generator_uniform"
+      trajectory="trajectory_exact"
+      space_navigator="nav_space"
+      surface_navigator="nav_surface"
+      terminator="term_world"
+      writer="write_root"
+      writer="write_vtk"
+      />
+
+</kassiopeia>
+
+<vtk_window
+    name="vtk_window"
+    enable_display="true"
+    enable_write="true"
+    frame_title="KGeoBag Visualization"
+    frame_size_x="1024"
+    frame_size_y="768"
+    frame_color_red=".2"
+    frame_color_green=".2"
+    frame_color_blue=".2"
+    view_angle="45"
+    eye_angle="0.5"
+    multi_samples="4"
+    depth_peeling="10"
+    >
+  <vtk_geometry_painter
+      name="geometry_painter"
+      file="EvectorBnew2Geometry.vtp"
+      surfaces="world/exb_setup/#"
+      />
+  <vtk_track_painter
+      name="track_painter"
+      file="EvectorBnew2.root"
+      point_object="component_step_world"
+      point_variable="position"
+      color_object="component_step_world"
+      color_variable="polar_angle_to_b"
+      />
+  <vtk_track_terminator_painter
+      name="terminator_painter"
+      file="EvectorBnew2.root"
+      point_object="component_track_world"
+      point_variable="final_position"
+      terminator_object="component_track_world"
+      terminator_variable="terminator_name"
+      add_terminator="term_electrode"
+      add_color="0 255 255"
+      add_terminator="term_fence"
+      add_color="0 0 255"
+      add_terminator="term_max_steps"
+      add_color="255 0 0"
+      />
+</vtk_window>
